@@ -87,12 +87,12 @@ class Misc(commands.Cog):
 
                         if learning_eng in message.author.roles:  # learning English, delete all Spanish
                             if lang == 'en':
-                                self.misc_settings["dailyGoal"][message.author.id]["messages_sent"]+=1
+                                self.misc_settings["dailyGoal"][f"message.author.id"]["messages_sent"]+=1
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                             
                         elif learning_sp in message.author.roles:  # learning Spanish, delete all English
                             if lang == 'es':
-                                self.misc_settings["dailyGoal"][message.author.id]["messages_sent"]+=1
+                                self.misc_settings["dailyGoal"][f"message.author.id"]["messages_sent"]+=1
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
                             

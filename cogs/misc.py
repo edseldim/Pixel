@@ -49,18 +49,10 @@ class Misc(commands.Cog):
         self.misc_settings = misc_settings
         self.bot = bot 
 
-
-    @tasks.loop(seconds = 10)
-    async def change_status(self):
-        await self.bot.change_presence(activity=discord.Game(next(status)))
-
-
     @commands.Cog.listener()
     async def on_member_join(self, member):
 
         await modules_moderation.member_count_update(member, self.misc_settings)
-        
-
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):

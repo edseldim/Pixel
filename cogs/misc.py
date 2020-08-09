@@ -95,9 +95,6 @@ class Misc(commands.Cog):
                     if user == f"{ctx.message.author.id}":
                         self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
                         modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
-
-                else:
-
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:

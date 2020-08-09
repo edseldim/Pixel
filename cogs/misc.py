@@ -118,8 +118,8 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def set_goal(self, ctx, nmessages):
-            for user in self.misc_settings["dailyGoal"]:
-                if user == f"{ctx.message.author.id}":
+            
+            if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
                     await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
                     modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                     return

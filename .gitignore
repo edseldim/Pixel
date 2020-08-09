@@ -1,0 +1,13 @@
+db.json
+db_expired.json
+db_expired_new.json
+misc_settings.json
+inviteLink.txt
+log_reports_banned_words.txt
+APIKey.txt
+banned_words_logger.txt
+/errors
+/__pycache__
+/.vscode
+cogs/__pycache__
+cogs/modules/randomwalkpictures

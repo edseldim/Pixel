@@ -48,6 +48,11 @@ class Misc(commands.Cog):
         self.settings = settings 
         self.misc_settings = misc_settings
         self.bot = bot 
+        self.reset_goals.start()
+
+    @tasks.loop(minutes=5)
+    async def reset_goals(self):
+        self.misc_settings["dailyGoal"] = {}
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -141,7 +146,7 @@ class Misc(commands.Cog):
         if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
             del self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]
             modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-            await ctx.send("Goal deleted succesfully! ✅``")
+            await ctx.send("Goal deleted succesfully! ✅")
         else:
             await ctx.send("You have no goals set yet, try ``p!set_goal [number of messages]``")
 

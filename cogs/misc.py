@@ -46,9 +46,13 @@ class Misc(commands.Cog):
         self.settings = settings 
         self.misc_settings = misc_settings
         self.bot = bot 
+        self.change_status.start()
+
+    def cog_unload(self):
+        self.change_status.cancel()
 
     @tasks.loop(seconds = 10)
-    async def change_status(self, ctx):
+    async def change_status(self):
         await self.bot.change_presence(activity=discord.Game(next(status)))
 
 

@@ -81,12 +81,23 @@ class Misc(commands.Cog):
                         lang = tb(stripped_msg).detect_language()
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 
+                
+
+
+
     """Spanish server hardcore thanks to @Ryry013#9234"""
     async def sp_serv_hardcore(self, ctx, msg, lang):
         learning_eng = msg.guild.get_role(738813394429411398)
         learning_sp = msg.guild.get_role(738813648369352804)
         if learning_eng in msg.author.roles:  # learning English, delete all Spanish
             if lang == 'es':
+                for user in self.misc_settings["dailyGoal"]:
+                    if user == f"{ctx.message.author.id}":
+                        self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
+                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+
+                else:
+
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:
@@ -94,6 +105,10 @@ class Misc(commands.Cog):
 
         elif learning_sp in msg.author.roles:  # learning Spanish, delete all English
             if lang == 'en':
+                for user in self.misc_settings["dailyGoal"]:
+                    if user == f"{ctx.message.author.id}":
+                        self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
+                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:
@@ -104,6 +119,8 @@ class Misc(commands.Cog):
             for user in self.misc_settings["dailyGoal"]:
                 if user == f"{ctx.message.author.id}":
                     await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
+                    modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+                    return
             
             else:
                 self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"] = {
@@ -114,7 +131,7 @@ class Misc(commands.Cog):
 
                 await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!showGoal``")
 
-            modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+                modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
 
 
 

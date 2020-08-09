@@ -75,14 +75,27 @@ class Misc(commands.Cog):
 
             if(message.guild.id == 501861392593453076):
                 ultra_hardcore = message.guild.get_role(738813425333043312)
-                if(ultra_hardcore in message.author.roles or message.channel.id == 501861392593453078):
-                    stripped_msg = modules_misc.rem_emoji_url(message)
-                    if stripped_msg[0] not in '=;!>':
-                        lang = tb(stripped_msg).detect_language()
+                stripped_msg = modules_misc.rem_emoji_url(message)
+                if stripped_msg[0] not in '=;!>':
+                    lang = tb(stripped_msg).detect_language()
+                    if(ultra_hardcore in message.author.roles or message.channel.id == 501861392593453078):
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 
-                
+                    if(f"{message.author.id}" in self.misc_settings["dailyGoal"]):
+                        learning_eng = message.guild.get_role(738813394429411398)
+                        learning_sp = message.guild.get_role(738813648369352804)
 
+                        if learning_eng in message.author.roles:  # learning English, delete all Spanish
+                            if lang == 'en':
+                                self.misc_settings["dailyGoal"][message.author.id]["messages_sent"]+=1
+                                modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+                            
+                        elif learning_sp in message.author.roles:  # learning Spanish, delete all English
+                            if lang == 'es':
+                                self.misc_settings["dailyGoal"][message.author.id]["messages_sent"]+=1
+                                modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+
+                            
 
 
     """Spanish server hardcore thanks to @Ryry013#9234"""
@@ -91,10 +104,6 @@ class Misc(commands.Cog):
         learning_sp = msg.guild.get_role(738813648369352804)
         if learning_eng in msg.author.roles:  # learning English, delete all Spanish
             if lang == 'es':
-                for user in self.misc_settings["dailyGoal"]:
-                    if user == f"{ctx.message.author.id}":
-                        self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
-                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:
@@ -102,10 +111,6 @@ class Misc(commands.Cog):
 
         elif learning_sp in msg.author.roles:  # learning Spanish, delete all English
             if lang == 'en':
-                for user in self.misc_settings["dailyGoal"]:
-                    if user == f"{ctx.message.author.id}":
-                        self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
-                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:

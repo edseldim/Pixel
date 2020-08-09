@@ -53,6 +53,7 @@ class Misc(commands.Cog):
     @tasks.loop(minutes=5)
     async def reset_goals(self):
         self.misc_settings["dailyGoal"] = {}
+        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -101,7 +102,8 @@ class Misc(commands.Cog):
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
                             
-
+    def cog_unload(self):
+        self.reset_goals.cancel()
 
     """Spanish server hardcore thanks to @Ryry013#9234"""
     async def sp_serv_hardcore(self, ctx, msg, lang):

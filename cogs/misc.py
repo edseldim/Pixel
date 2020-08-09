@@ -135,6 +135,14 @@ class Misc(commands.Cog):
 
                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
+    
+    @commands.command()
+    async def del_goal(self, ctx):
+        if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
+            del self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]
+        else:
+            await ctx.send("You have no goals set yet, try ``p!set_goal [number of messages]``")
+
 
 
     @commands.command()

@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from random import randint, choice
 import io
 from textblob import TextBlob as tb
+import time
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 status = cycle(["status 1", "status 2"])
@@ -37,6 +38,7 @@ class Misc(commands.Cog):
 
             misc_settings = {
                         'countMembersChannel':[],
+                        'dailyGoal': {},
             }
 
         else:
@@ -46,10 +48,10 @@ class Misc(commands.Cog):
         self.settings = settings 
         self.misc_settings = misc_settings
         self.bot = bot 
-        self.change_status.start()
+    #     self.change_status.start()
 
-    def cog_unload(self):
-        self.change_status.cancel()
+    # def cog_unload(self):
+    #     self.change_status.cancel()
 
     @tasks.loop(seconds = 10)
     async def change_status(self):
@@ -107,6 +109,21 @@ class Misc(commands.Cog):
                     await msg.delete()
                 except discord.errors.NotFound:
                     return
+
+    @commands.command()
+    async def set_goal(self, ctx, nmessages):
+            for user in self.misc_settings["dailyGoal"]:
+                if user == f"{ctx.message.author.id}":
+                    await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
+            
+            else:
+                self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"] = {
+                    "messages_sent": 0,
+                    "goal": nmessages,
+                    "date": time.localtime()
+                }
+
+
 
     @commands.command()
     async def uwu(self, ctx):

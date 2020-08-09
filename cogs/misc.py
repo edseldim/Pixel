@@ -1,5 +1,6 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+from itertools import cycle
 from .modules import modules_moderation as modules_moderation
 from .modules import modules_misc
 import json
@@ -11,7 +12,7 @@ import io
 from textblob import TextBlob as tb
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
-
+status = cycle(["status 1", "status 2"])
 class Misc(commands.Cog):
 
     def __init__(self, bot):
@@ -45,6 +46,11 @@ class Misc(commands.Cog):
         self.settings = settings 
         self.misc_settings = misc_settings
         self.bot = bot 
+
+    @tasks.loop(seconds = 10)
+    async def change_status(self, ctx):
+        await self.bot.change_presence(activity=discord.Game(next(status)))
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member):

@@ -48,10 +48,7 @@ class Misc(commands.Cog):
         self.settings = settings 
         self.misc_settings = misc_settings
         self.bot = bot 
-    #     self.change_status.start()
 
-    # def cog_unload(self):
-    #     self.change_status.cancel()
 
     @tasks.loop(seconds = 10)
     async def change_status(self):
@@ -122,6 +119,10 @@ class Misc(commands.Cog):
                     "goal": nmessages,
                     "date": time.localtime()
                 }
+
+                await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!showGoal``")
+
+            modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
 
 
 

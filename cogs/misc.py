@@ -94,7 +94,7 @@ class Misc(commands.Cog):
                 for user in self.misc_settings["dailyGoal"]:
                     if user == f"{ctx.message.author.id}":
                         self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
-                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:
@@ -105,7 +105,7 @@ class Misc(commands.Cog):
                 for user in self.misc_settings["dailyGoal"]:
                     if user == f"{ctx.message.author.id}":
                         self.misc_settings["dailyGoal"][user]["messages_sent"]+=1
-                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:
@@ -116,7 +116,7 @@ class Misc(commands.Cog):
             for user in self.misc_settings["dailyGoal"]:
                 if user == f"{ctx.message.author.id}":
                     await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
-                    modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+                    modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                     return
             
             else:
@@ -128,7 +128,7 @@ class Misc(commands.Cog):
 
                 await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!showGoal``")
 
-                modules_moderation.saveSpecific(self.misc_settings, "misc_settings")
+                modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
 
 

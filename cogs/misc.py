@@ -155,7 +155,7 @@ class Misc(commands.Cog):
             else:
                 self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"] = {
                     "messages_sent": 0,
-                    "goal": nmessages,
+                    "goal": int(nmessages),
                     "date": time.localtime()
                 }
 

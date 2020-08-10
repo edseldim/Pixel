@@ -98,7 +98,7 @@ class Misc(commands.Cog):
                                 messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
                                 goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                                if(messages_sent == goal):
+                                if(messages_sent >= goal):
                                     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
 
                                         channel = await message.guild.get_channel(int(self.misc_settings["goalChannel"]))
@@ -113,7 +113,7 @@ class Misc(commands.Cog):
                                 messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
                                 goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                                if(messages_sent == goal):
+                                if(messages_sent >= goal):
                                     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
 
                                         channel = await message.guild.get_channel(int(self.misc_settings["goalChannel"]))
@@ -175,12 +175,15 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def set_goal_channel(self, ctx, channel_id):
-        if(modules_moderation.channel_existance(channel_id, self.bot)):
-            self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
-            await ctx.send(f"{channel_id} added succesfully! ✅")
-            modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+        if ctx.message.author.id in self.misc_settings['roles_allowed']:
+            if(modules_moderation.channel_existance(channel_id, self.bot)):
+                self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
+                await ctx.send(f"{channel_id} added succesfully! ✅")
+                modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+            else:
+                await ctx.send(f"{channel_id} not found! 🤔")
         else:
-            await ctx.send(f"{channel_id} not found! 🤔")
+            await ctx.send(f"You don't have enough permissions to perform this action! ❌")
 
 
 

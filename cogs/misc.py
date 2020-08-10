@@ -102,7 +102,7 @@ class Misc(commands.Cog):
                                     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
 
                                         channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
-                                        channel.send(f"<@{channel.message.author.id}> You have successfully reached today's goal. 🥳"  
+                                        channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
                                         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
                                         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
@@ -117,7 +117,7 @@ class Misc(commands.Cog):
                                     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
 
                                         channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
-                                        channel.send(f"<@{channel.message.author.id}> You have successfully reached today's goal. 🥳"  
+                                        channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
                                         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
                                         del self.misc_settings["dailyGoal"][f"{message.author.id}"]

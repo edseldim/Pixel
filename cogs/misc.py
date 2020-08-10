@@ -194,7 +194,7 @@ class Misc(commands.Cog):
 
         if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
 
-            emb = discord.Embed(title = ctx.message.author, color=discord.Color(int('00ff00', 16)))
+            emb = discord.Embed(title = await show_member(ctx, ctx.message.author.id), color=discord.Color(int('00ff00', 16)))
 
             messages_sent = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["messages_sent"]
             goal = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["goal"]
@@ -202,7 +202,7 @@ class Misc(commands.Cog):
             value = f"Today's goal: {messages_sent}/{goal} words \n"
             value += f"you are {remaining} words away from your goal! Keep working hard!\n" 
 
-            emb.add_field(name = f"{ctx.message.author.id}'s' goal",
+            emb.add_field(name = f"{ctx.message.author.id}'s goal",
                             value = value,
                             inline = False)
 
@@ -211,8 +211,22 @@ class Misc(commands.Cog):
         else:
             await ctx.send(f"<@{ctx.message.author.id}> not found! 🤔")
 
-           
+    async def show_member(self, ctx, id):
 
+        """Retrieves the nick of a member"""
+
+        member = await modules_moderation.member_converter(ctx, id)
+
+        if member:
+            name = f"{member.name}#{member.discriminator} ({member.id})"
+
+            return name
+
+        else:
+
+            name = 'Not found'
+
+            return name
 
 
     @commands.command()

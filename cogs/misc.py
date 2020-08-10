@@ -202,7 +202,7 @@ class Misc(commands.Cog):
             value = f"Today's goal: {messages_sent}/{goal} words \n"
             value += f"you are {remaining} words away from your goal! Keep working hard!\n" 
 
-            emb.add_field(name = f"{ctx.message.author.id}'s goal",
+            emb.add_field(name = f"{ctx.message.author.name}'s goal",
                             value = value,
                             inline = False)
 

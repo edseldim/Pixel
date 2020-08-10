@@ -39,6 +39,7 @@ class Misc(commands.Cog):
             misc_settings = {
                         'countMembersChannel':[],
                         'dailyGoal': {},
+                        'goalChannel':{},
             }
 
         else:
@@ -91,15 +92,35 @@ class Misc(commands.Cog):
                         learning_eng = message.guild.get_role(738813394429411398)
                         learning_sp = message.guild.get_role(738813648369352804)
 
-                        if learning_eng in message.author.roles:  # learning English, delete all Spanish
+                        if learning_eng in message.author.roles:  
                             if lang == 'en':
                                 self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]+=1
+                                messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
+                                goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                            
-                        elif learning_sp in message.author.roles:  # learning Spanish, delete all English
+                                if(messages_sent == goal):
+                                    if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
+
+                                        channel = await message.guild.get_channel(int(self.misc_settings["goalChannel"]))
+                                        channel.send(f"<@{channel.message.author.id}> You have successfully reached today's goal. 🥳"  
+                                        +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
+
+                                        del self.misc_settings["dailyGoal"][f"{message.author.id}"]
+                          
+                        elif learning_sp in message.author.roles:  
                             if lang == 'es':
                                 self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]+=1
+                                messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
+                                goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+                                if(messages_sent == goal):
+                                    if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
+
+                                        channel = await message.guild.get_channel(int(self.misc_settings["goalChannel"]))
+                                        channel.send(f"<@{channel.message.author.id}> You have successfully reached today's goal. 🥳"  
+                                        +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
+
+                                        del self.misc_settings["dailyGoal"][f"{message.author.id}"]
 
                             
     def cog_unload(self):
@@ -151,6 +172,15 @@ class Misc(commands.Cog):
             await ctx.send("Goal deleted succesfully! ✅")
         else:
             await ctx.send("You have no goals set yet, try ``p!set_goal [number of messages]``")
+
+    @commands.command()
+    async def set_goal_channel(self, ctx, channel_id):
+        if(modules_moderation.channel_existance(channel_id, self.bot)):
+            self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
+            await ctx.send(f"{channel_id} added succesfully! ✅")
+            modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+        else:
+            await ctx.send(f"{channel_id} not found! 🤔")
 
 
 

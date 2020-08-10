@@ -102,10 +102,11 @@ class Misc(commands.Cog):
                                     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
 
                                         channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
-                                        channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
+                                        await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
                                         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
                                         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
+                                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                           
                         elif learning_sp in message.author.roles:  
                             if lang == 'es':
@@ -117,10 +118,11 @@ class Misc(commands.Cog):
                                     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
 
                                         channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
-                                        channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
+                                        await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
                                         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
                                         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
+                                        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
                             
     def cog_unload(self):

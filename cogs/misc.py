@@ -194,7 +194,7 @@ class Misc(commands.Cog):
 
         if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
 
-            emb = discord.Embed(title = await show_member(ctx, ctx.message.author.id), color=discord.Color(int('00ff00', 16)))
+            emb = discord.Embed(title = await self.show_member(ctx, ctx.message.author.id), color=discord.Color(int('00ff00', 16)))
 
             messages_sent = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["messages_sent"]
             goal = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["goal"]

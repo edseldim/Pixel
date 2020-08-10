@@ -187,6 +187,32 @@ class Misc(commands.Cog):
         else:
             await ctx.send(f"You don't have enough permissions to perform this action! ❌")
 
+    @commands.command()
+    async def show_goal(self, ctx):
+
+        """Creates am embed for the goal"""
+
+        if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
+
+            emb = discord.Embed(title = ctx.message.author, color=discord.Color(int('00ff00', 16)))
+
+            messages_sent = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["messages_sent"]
+            goal = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["goal"]
+            remaining = int(goal) - int(messages_sent)
+            value = f"Today's goal: {messages_sent}/{goal} words \n"
+            value += f"you are {remaining} words away from your goal! Keep working hard!\n" 
+
+            emb.add_field(name = f"{ctx.message.author.id}'s' goal",
+                            value = value,
+                            inline = False)
+
+            await ctx.send(embed = emb)
+
+        else:
+            await ctx.send(f"<@{ctx.message.author.id}> not found! 🤔")
+
+           
+
 
 
     @commands.command()

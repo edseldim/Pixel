@@ -161,7 +161,7 @@ class Misc(commands.Cog):
                     "date": time.localtime()
                 }
 
-                await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!showGoal``")
+                await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!show_goal``")
 
                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 

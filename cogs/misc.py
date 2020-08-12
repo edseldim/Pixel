@@ -208,7 +208,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def set_goal_channel(self, ctx, channel_id):
-        if ctx.message.author.id in self.misc_settings['roles_allowed']:
+        if ctx.message.author.id in self.settings['roles_allowed']:
             if(modules_moderation.channel_existance(channel_id, self.bot)):
                 self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
                 await ctx.send(f"{channel_id} added succesfully! ✅")

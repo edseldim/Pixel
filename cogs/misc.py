@@ -199,7 +199,7 @@ class Misc(commands.Cog):
     
     @commands.command()
     async def del_goal(self, ctx):
-        if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"] or ctx.message.author.id==155422817540767745:
+        if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
             del self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]
             modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
             await ctx.send("Goal deleted succesfully! ✅")
@@ -208,7 +208,7 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def set_goal_channel(self, ctx, channel_id):
-        if ctx.message.author.id in self.settings['roles_allowed']:
+        if ctx.message.author.id in self.settings['roles_allowed'] or ctx.message.author.id==155422817540767745:
             if(modules_moderation.channel_existance(channel_id, self.bot)):
                 self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
                 await ctx.send(f"{channel_id} added succesfully! ✅")

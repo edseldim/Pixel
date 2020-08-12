@@ -53,10 +53,11 @@ class Misc(commands.Cog):
         self.bot = bot 
         self.reset_goals.start()
 
-    @tasks.loop(minutes=5)
+    @tasks.loop(days=1)
     async def reset_goals(self):
         self.misc_settings["dailyGoal"] = {}
         modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+        if()
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -258,6 +259,39 @@ class Misc(commands.Cog):
             name = 'Not found'
 
             return name
+    
+    @command.command()
+    async def goal_leaderboard(self, ctx):
+
+        if(len(self.misc_settings['rank']) > 30):
+            keys = self.misc_settings['rank'].keys()
+            iterator = iter(self.misc_settings['rank'].keys())
+            first_key = next(iterator)
+            del self.misc_settings['rank'][first_key]
+
+        emb_dict = {}
+        mes = ""
+        for rank_date in self.misc_settings['rank']:
+            for user in rank_date:
+                if user in emb_dict:
+                    emb_dict[user]+= self.misc_settings['rank'][date][user]
+                else:
+                     emb_dict[user] = self.misc_settings['rank'][date][user]
+
+        sort_users = sorted(emb_dict.items(), key = lambda x: x[1], reverse=True)
+        pos = 1
+        emb = discord.Embed(title = "Goals Leaderboard", color=discord.Color(int('00ff00', 16)))
+
+        for i in sort_users:    
+            mes += f"**{pos}) {i[0]}**\n {i[1]}\n"
+            pos+=1
+
+        emb.add_field(name = "last 30 days",
+                        value = mes,
+                        inline = False)
+
+        await ctx.send(embed = emb)
+
 
 
     @commands.command()

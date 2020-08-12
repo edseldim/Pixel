@@ -274,9 +274,9 @@ class Misc(commands.Cog):
         for rank_date in self.misc_settings['rank']:
             for user in rank_date:
                 if user in emb_dict:
-                    emb_dict[user]+= self.misc_settings['rank'][date][user]
+                    emb_dict[user]+= self.misc_settings['rank'][rank_date][user]
                 else:
-                     emb_dict[user] = self.misc_settings['rank'][date][user]
+                     emb_dict[user] = self.misc_settings['rank'][rank_date][user]
 
         sort_users = sorted(emb_dict.items(), key = lambda x: x[1], reverse=True)
         pos = 1

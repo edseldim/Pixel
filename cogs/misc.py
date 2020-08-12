@@ -283,7 +283,7 @@ class Misc(commands.Cog):
         emb = discord.Embed(title = "Goals Leaderboard", color=discord.Color(int('00ff00', 16)))
 
         for i in sort_users:    
-            mes += f"**{pos}) {show_member(ctx,i[0])}**\n {i[1]}\n"
+            mes += f"**{pos}) {self.show_member(ctx,i[0])}**\n {i[1]}\n"
             pos+=1
 
         emb.add_field(name = "last 30 days",

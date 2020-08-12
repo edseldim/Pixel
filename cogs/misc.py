@@ -11,6 +11,7 @@ from random import randint, choice
 import io
 from textblob import TextBlob as tb
 import time
+from datetime import date
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 status = cycle(["status 1", "status 2"])
@@ -40,6 +41,7 @@ class Misc(commands.Cog):
                         'countMembersChannel':[],
                         'dailyGoal': {},
                         'goalChannel':{},
+                        'rank':{}
             }
 
         else:
@@ -105,7 +107,22 @@ class Misc(commands.Cog):
                                         await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
                                         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
+                                        year =  self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][0]
+                                        month = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][1]
+                                        day = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][2]
+                                        date_formatted = f"{year}/{month}/{day}"
+                                        if(date_formatted not in self.misc_settings['rank']):
+                                            self.misc_settings['rank'][date_formatted] = {
+                                                f"{message.author.id}": 1,
+                                            }
+                                        else:
+                                            if (f"{message.author.id}" in self.misc_settings['rank'][date_formatted]):
+                                                self.misc_settings['rank'][date_formatted][f"{message.author.id}"]+=1
+                                            else:
+                                                self.misc_settings['rank'][date_formatted][f"{message.author.id}"] = 1
+                                        
                                         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
+
                                         modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                           
                         elif learning_sp in message.author.roles:  
@@ -121,6 +138,20 @@ class Misc(commands.Cog):
                                         await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
                                         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
+                                        year =  self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][0]
+                                        month = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][1]
+                                        day = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][2]
+                                        date_formatted = f"{year}/{month}/{day}"
+                                        if(date_formatted not in self.misc_settings['rank']):
+                                            self.misc_settings['rank'][date_formatted] = {
+                                                f"{message.author.id}": 1,
+                                            }
+                                        else:
+                                            if (f"{message.author.id}" in self.misc_settings['rank'][date_formatted]):
+                                                self.misc_settings['rank'][date_formatted][f"{message.author.id}"]+=1
+                                            else:
+                                                self.misc_settings['rank'][date_formatted][f"{message.author.id}"] = 1
+                                        
                                         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
                                         modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 

@@ -272,7 +272,7 @@ class Misc(commands.Cog):
         emb_dict = {}
         mes = ""
         for rank_date in self.misc_settings['rank']:
-            for user in self.misc_settings['rank']['rank_date']:
+            for user in self.misc_settings['rank'][f'{rank_date}']:
                 if user in emb_dict:
                     emb_dict[user]+= self.misc_settings['rank'][rank_date][user]
                 else:

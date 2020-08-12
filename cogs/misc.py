@@ -53,11 +53,11 @@ class Misc(commands.Cog):
         self.bot = bot 
         self.reset_goals.start()
 
-    @tasks.loop(days=1)
+    @tasks.loop(minutes=1440)
     async def reset_goals(self):
         self.misc_settings["dailyGoal"] = {}
         modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-        if()
+        
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -260,7 +260,7 @@ class Misc(commands.Cog):
 
             return name
     
-    @command.command()
+    @commands.command()
     async def goal_leaderboard(self, ctx):
 
         if(len(self.misc_settings['rank']) > 30):

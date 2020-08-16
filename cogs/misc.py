@@ -40,7 +40,7 @@ class Misc(commands.Cog):
             misc_settings = {
                         'countMembersChannel':[],
                         'dailyGoal': {},
-                        'goalChannel': str(),
+                        'goalChannel': "",
                         'rank':{}
                         
             }

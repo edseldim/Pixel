@@ -41,7 +41,7 @@ class Misc(commands.Cog):
                         'countMembersChannel':[],
                         'dailyGoal': {},
                         'goalChannel':{},
-                        'rank':{}
+                        'rank':{},
             }
 
         else:
@@ -87,7 +87,14 @@ class Misc(commands.Cog):
                 ultra_hardcore = message.guild.get_role(738813425333043312)
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in '=;!>':
-                    lang = tb(stripped_msg).detect_language()
+                    try:
+
+                        lang = tb(stripped_msg).detect_language()
+
+                    except (tb.exceptions.TranslatorError, HTTPError, TimeoutError):
+
+                        pass
+
                     if(ultra_hardcore in message.author.roles or message.channel.id == 501861392593453078):
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 
@@ -180,13 +187,22 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def set_goal(self, ctx, nmessages):
+
+        """Sets a goal
+        
+        Parameters:
+        
+        nmessages: the amount of messages of your goal"""
             
-            if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
-                    await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
-                    modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                    return
-            
-            else:
+        if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
+                await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
+                modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+                return
+        
+        else:
+
+            if(int(nmessages) >= 20):
+
                 self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"] = {
                     "messages_sent": 0,
                     "goal": int(nmessages),
@@ -196,10 +212,16 @@ class Misc(commands.Cog):
                 await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!show_goal``")
 
                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+            
+            else:
 
+                await ctx.send("Error: the minimum amount of messages for a goal has to be 20")
     
     @commands.command()
     async def del_goal(self, ctx):
+
+        """Deletes your current goal"""
+
         if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
             del self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]
             modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
@@ -209,6 +231,13 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def set_goal_channel(self, ctx, channel_id):
+
+        """Sets a goal channel, this has to be set otherwise members won't be alerted when they complete their goals
+        
+        parameters:
+        
+        channel_id: ID of the goal channel"""
+
         if ctx.message.author.id in self.settings['roles_allowed'] or ctx.message.author.id==155422817540767745:
             if(modules_moderation.channel_existance(channel_id, self.bot)):
                 self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
@@ -222,7 +251,7 @@ class Misc(commands.Cog):
     @commands.command()
     async def show_goal(self, ctx):
 
-        """Creates am embed for the goal"""
+        """Shows the current status of a member goal"""
 
         if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
 
@@ -262,6 +291,8 @@ class Misc(commands.Cog):
     
     @commands.command()
     async def goal_leaderboard(self, ctx):
+
+        """Shows the goal leaderboard of the past 30 days"""
 
         if(len(self.misc_settings['rank']) > 30):
             keys = self.misc_settings['rank'].keys()

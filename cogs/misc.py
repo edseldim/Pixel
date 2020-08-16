@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands, tasks
 from itertools import cycle
 from .modules import modules_moderation as modules_moderation
-from .modules import modules_misc
+from .modules import modules_misc as modules_misc
 import json
 import os
 import asyncio

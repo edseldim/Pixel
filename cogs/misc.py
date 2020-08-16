@@ -241,6 +241,13 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def del_goal_channel(self, ctx, channel_id):
+
+        """Deletes the current goal channel
+        
+        parameters:
+        
+        channel_id: ID of the current goal channel"""
+
         if ctx.message.author.id in self.settings['roles_allowed'] or ctx.message.author.id==155422817540767745:
             if f"{ctx.message.guild.id}" in self.misc_settings["goalChannel"]:
                 del self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"]

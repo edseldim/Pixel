@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
 import re
-
+from textblob import TextBlob as tb
+import asyncio
+from functools import partial
 
 # credit: https://gist.github.com/dperini/729294
 _url = re.compile("""
@@ -73,6 +75,8 @@ def is_emoji(char):
     )
     return any(start <= ord(char) <= end for start, end in EMOJI_MAPPING)
 
+_loop = asyncio.get_event_loop()
+
 """thanks to @Ryry013#9234"""
 def rem_emoji_url(msg):
     if isinstance(msg, discord.Message):
@@ -82,3 +86,9 @@ def rem_emoji_url(msg):
         if is_emoji(char):
             new_msg = new_msg.replace(char, '').replace('  ', '')
     return new_msg
+
+def _predetect(text):
+    return tb(text).detect_language()
+
+async def detect_language(text):
+    return await _loop.run_in_executor(None, partial(_predetect, text))

@@ -14,7 +14,7 @@ import time
 from datetime import date
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
-status = cycle(["status 1", "status 2"])
+
 class Misc(commands.Cog):
 
     def __init__(self, bot):
@@ -87,13 +87,8 @@ class Misc(commands.Cog):
                 ultra_hardcore = message.guild.get_role(738813425333043312)
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in '=;!>':
-                    try:
 
-                        lang = tb(stripped_msg).detect_language()
-
-                    except (tb.exceptions.TranslatorError, HTTPError, TimeoutError):
-
-                        pass
+                    lang = await modules_misc.detect_language(stripped_msg)
 
                     if(ultra_hardcore in message.author.roles or message.channel.id == 501861392593453078):
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)

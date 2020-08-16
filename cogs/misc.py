@@ -99,64 +99,13 @@ class Misc(commands.Cog):
 
                         if learning_eng in message.author.roles:  
                             if lang == 'en':
-                                # self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]+=1
-                                # messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
-                                # goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
-                                # modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                                # if(messages_sent >= goal):
-                                #     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
-
-                                #         channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
-                                #         await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
-                                #         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
-
-                                #         year =  self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][0]
-                                #         month = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][1]
-                                #         day = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][2]
-                                #         date_formatted = f"{year}/{month}/{day}"
-                                #         if(date_formatted not in self.misc_settings['rank']):
-                                #             self.misc_settings['rank'][date_formatted] = {
-                                #                 f"{message.author.id}": 1,
-                                #             }
-                                #         else:
-                                #             if (f"{message.author.id}" in self.misc_settings['rank'][date_formatted]):
-                                #                 self.misc_settings['rank'][date_formatted][f"{message.author.id}"]+=1
-                                #             else:
-                                #                 self.misc_settings['rank'][date_formatted][f"{message.author.id}"] = 1
-                                        
-                                #         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
 
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                           
                         elif learning_sp in message.author.roles:  
                             if lang == 'es':
-                                # self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]+=1
-                                # messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
-                                # goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
-                                # modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                                # if(messages_sent >= goal):
-                                #     if(f"{message.guild.id}" in self.misc_settings["goalChannel"]):
-
-                                #         channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
-                                #         await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
-                                #         +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
-
-                                #         year =  self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][0]
-                                #         month = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][1]
-                                #         day = self.misc_settings["dailyGoal"][f"{message.author.id}"]["date"][2]
-                                #         date_formatted = f"{year}/{month}/{day}"
-                                #         if(date_formatted not in self.misc_settings['rank']):
-                                #             self.misc_settings['rank'][date_formatted] = {
-                                #                 f"{message.author.id}": 1,
-                                #             }
-                                #         else:
-                                #             if (f"{message.author.id}" in self.misc_settings['rank'][date_formatted]):
-                                #                 self.misc_settings['rank'][date_formatted][f"{message.author.id}"]+=1
-                                #             else:
-                                #                 self.misc_settings['rank'][date_formatted][f"{message.author.id}"] = 1
-                                        
-                                #         del self.misc_settings["dailyGoal"][f"{message.author.id}"]
+                                
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                                         

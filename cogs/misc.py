@@ -40,7 +40,7 @@ class Misc(commands.Cog):
             misc_settings = {
                         'countMembersChannel':[],
                         'dailyGoal': {},
-                        'goalChannel': "",
+                        'goalChannel': {},
                         'rank':{}
                         
             }
@@ -228,12 +228,12 @@ class Misc(commands.Cog):
 
         if ctx.message.author.id in self.settings['roles_allowed'] or ctx.message.author.id==155422817540767745:
             if(modules_moderation.channel_existance(channel_id, self.bot)):
-                if(len(self.misc_settings["goalChannel"]) == 0):
+                if f"{ctx.message.guild.id}" not in self.misc_settings["goalChannel"]:
                     self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"] = channel_id
                     await ctx.send(f"{channel_id} added succesfully! ✅")
                     modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                 else:
-                    await ctx.send(f"the channel <#{self.misc_settings['goalChannel']}> is already the goal channel. Remove it by using ``p!del_goal_channel [channel_ID]``")
+                    await ctx.send(f"the channel <#{self.misc_settings['goalChannel'][f'{ctx.message.guild.id}']}> is already the goal channel. Remove it by using ``p!del_goal_channel [channel_ID]``")
             else:
                 await ctx.send(f"{channel_id} not found! 🤔")
         else:
@@ -242,8 +242,8 @@ class Misc(commands.Cog):
     @commands.command()
     async def del_goal_channel(self, ctx, channel_id):
         if ctx.message.author.id in self.settings['roles_allowed'] or ctx.message.author.id==155422817540767745:
-            if(len(self.misc_settings["goalChannel"]) != 0):
-                self.misc_settings["goalChannel"] = str()
+            if f"{ctx.message.guild.id}" in self.misc_settings["goalChannel"]:
+                del self.misc_settings["goalChannel"][f"{ctx.message.guild.id}"]
                 await ctx.send(f"{channel_id} deleted succesfully! ✅")
                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
             else:

@@ -87,11 +87,11 @@ class Misc(commands.Cog):
             if(message.guild.id == 501861392593453076):
                 ultra_hardcore = message.guild.get_role(738813425333043312)
                 stripped_msg = modules_misc.rem_emoji_url(message)
-                if stripped_msg[0] not in '=;!>':
+                if stripped_msg[0] not in '=;!>' and len(stripped_msg) > 5:
 
                     lang = await modules_misc.detect_language(stripped_msg)
 
-                    if(ultra_hardcore in message.author.roles or message.channel.id == 501861392593453078):
+                    if(ultra_hardcore in message.author.roles or message.channel.id == 739127911650557993):
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 
                     if(f"{message.author.id}" in self.misc_settings["dailyGoal"]):

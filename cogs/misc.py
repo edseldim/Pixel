@@ -87,7 +87,7 @@ class Misc(commands.Cog):
             if(message.guild.id == 501861392593453076):
                 ultra_hardcore = message.guild.get_role(738813425333043312)
                 stripped_msg = modules_misc.rem_emoji_url(message)
-                if stripped_msg[0] not in '=;!>' and len(stripped_msg) > 5:
+                if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:
 
                     lang = await modules_misc.detect_language(stripped_msg)
 
@@ -197,7 +197,7 @@ class Misc(commands.Cog):
                     "date": time.localtime()
                 }
 
-                await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!show_goal`` \n\n **Remember setting a language learning role otherwise this won't work for you**")
+                await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!show_goal`` \n\n **Remember to set a language learning role otherwise this won't work for you**")
 
                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
             
@@ -272,8 +272,8 @@ class Misc(commands.Cog):
             messages_sent = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["messages_sent"]
             goal = self.misc_settings["dailyGoal"][f"{ctx.message.author.id}"]["goal"]
             remaining = int(goal) - int(messages_sent)
-            value = f"Today's goal: {messages_sent}/{goal} words \n"
-            value += f"you are {remaining} words away from your goal! Keep working hard!\n" 
+            value = f"Today's goal: {messages_sent}/{goal} messages \n"
+            value += f"you are {remaining} messages away from your goal! Keep working hard!\n" 
 
             emb.add_field(name = f"{ctx.message.author.name}'s goal",
                             value = value,

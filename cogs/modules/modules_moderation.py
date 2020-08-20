@@ -293,9 +293,7 @@ async def react_corrections(bot, message):
 
             await channels_correction_settings(bot,message,message.author.roles, [243853718758359040, 267368304333553664], 'spanish')
 
-        elif str(message.channel.id) == '739127911650557993': 
-            
-            #language exchange chat 739127911650557993
+        else: 
 
              await message.add_reaction('✏')
 

@@ -93,7 +93,7 @@ class Misc(commands.Cog):
 
             await modules_moderation.react_corrections(self.bot, message)
 
-            if(message.guild.id == self.settings["guildId"]):
+            if(message.guild.id == self.misc_settings["guildId"]):
                 ultra_hardcore = self.misc_settings["nightmareMode"]["role_id"]
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:

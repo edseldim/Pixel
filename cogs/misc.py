@@ -440,19 +440,27 @@ class Misc(commands.Cog):
     @commands.command()
     async def add_member_count_category(self,ctx, category_id):
 
-        guild = modules_moderation.get_guild(self.bot, ctx.message.guild.id)
-        category_id = int(category_id)
+        guild = modules_moderation.get_guild(self.bot, ctx.message.guild.id) #Retrieves the server ID
+        category_id = int(category_id) #Converts the ID of the category, that we want to add the count to, to int
 
-        if modules_moderation.check_roles(ctx.message.author.roles, self.settings['roles_allowed']) == 1 or ctx.message.author.id == 155422817540767745:
-            if modules_moderation.category_existance([{'id':category_id}], guild.categories) == 1:
-                await ctx.send(f'{category_id} added !')
-                category = modules_moderation.get_category([{'id':category_id}], guild.categories)
-                self.misc_settings['countMembersChannel'].append({'id':category_id, 'name':category.name})
-                modules_moderation.saveSpecific(self.misc_settings, 'misc_settings.json')
+        if modules_moderation.check_roles(ctx.message.author.roles, self.settings['roles_allowed']) == 1 or ctx.message.author.id == 155422817540767745: #Checks whether the user who's using this command has perms or not
+            if modules_moderation.category_existance([{'id':category_id}], guild.categories) == 1: #Checks whether the category exists or not
+                try:
+                    category = modules_moderation.get_category([{'id':category_id}], guild.categories) #Retrieves the category object
+                except Exception as e:
+                    await ctx.send('Error when trying to retrieve the category object')#Error message
+                else:
+                    try:
+                        self.misc_settings['countMembersChannel'].append({'id':category_id, 'name':category.name}) #Saves the server and category 
+                    except Exception as e:
+                        await ctx.send('Error when trying to change the category name') #Error message
+                    else:
+                        await ctx.send(f'{category_id} updated !') #If everything works, pixel will let the user know
+                        modules_moderation.saveSpecific(self.misc_settings, 'misc_settings.json') #Applies changes
             else:
-                await ctx.send(f'{category_id} doesnt exists!')
+                await ctx.send(f'{category_id} doesnt exist!') #Error message
         else:
-            await ctx.send("**You don't have enough permissions**")
+            await ctx.send("**You don't have enough permissions**") #Error message
 
       
 

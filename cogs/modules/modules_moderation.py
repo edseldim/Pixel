@@ -80,21 +80,14 @@ def category_existance(category_db, guild_categories):
         """checks whether a category exists or not"""
         """the id provided should be an integer"""
 
-        categories_id = []
-
-        for category_stored in category_db:
-
-            categories_id.append(category_stored['id'])
-
-        for category in guild_categories:
-
-            if category.id in categories_id:
-
-                return 1 #exists
-
+        categories_id = [] #Makes a list that receives the IDs of the categories of a server
+        for category_stored in category_db: #retrieves the categories saved by pixel
+            categories_id.append(category_stored['id']) #Saves each category id in categories_id
+        for category in guild_categories: #retrieves the categories of a server
+            if category.id in categories_id: #Checks whether the category of a server is contained in pixel's db 
+                return 1 #Category found
         else:
-
-            return 0 #doesn't exist
+            return 0 #Category not found
 
 
 def get_channel_name(channel_id, bot):
@@ -357,43 +350,25 @@ def get_category(category_db, categories):
 
     """returns a category object"""
 
-    categories_id = []
-
-    for category_stored in category_db:
-
-        categories_id.append(category_stored['id'])
-
-    if category_existance(category_db, categories) == 1:
-
-        for category in categories:
-
-            if category.id in categories_id:
-
-                return category
-
-
-#move it
+    categories_id = [] #Makes a list for all the categories saved
+    for category_stored in category_db: #Retrieves all the categories saved
+        categories_id.append(category_stored['id']) #Saves all the categories id in categories_id
+    for category in categories: #Retrieves all the server categories
+            if category.id in categories_id: #Checks what server is the one that needs to be returned
+                return category #returns the target category
 
 async def member_count_update(member, misc_settings):
 
-    guild = member.guild
+    """Updates the member count"""
 
-    if category_existance(misc_settings['countMembersChannel'], guild.categories) == 1:
-
-        category = get_category(misc_settings['countMembersChannel'], guild.categories)
-
-        for category_db in misc_settings['countMembersChannel']:
-
-            if category.id == category_db['id']:
-
+    guild = member.guild #Retrieves the object for the server that the user joined
+    if category_existance(misc_settings['countMembersChannel'], guild.categories) == 1: #Checks whether the server is contained in pixel's db
+        category = get_category(misc_settings['countMembersChannel'], guild.categories) #Retrieves the category where the member count is
+        for category_db in misc_settings['countMembersChannel']: #Retrieves all the categories saved to find the one pixel will update
+            if category.id == category_db['id']: #Locates the category id in pixel's db for updating purposes
                 try:
-
-                    await category.edit(name = f"{category_db['name']} ({guild.member_count} MEMBERS)")
-
+                    await category.edit(name = f"{category_db['name']} ({guild.member_count} MEMBERS)") #updates the category name
                 except Forbidden:
-
-                    print(f"**I don't have enough permissions to change {category.name}'s name'")
-
+                    print(f"**I don't have enough permissions to change {category.name}'s name'") #Error message
     else:
-
         print('It doesnt exist!')

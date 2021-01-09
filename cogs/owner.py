@@ -21,12 +21,7 @@ except Exception as error:
             print(error)
 
             settings = {
-
-                'censuring_in_channel': [],
-                    'banned_words': [],
                     'roles_allowed': [243854949522472971],
-                    'censured_people': [],
-                    'Admin_Alert_Channels':[]
                     } 
 
 else:

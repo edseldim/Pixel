@@ -362,6 +362,7 @@ async def member_count_update(member, misc_settings):
     """Updates the member count"""
 
     guild = member.guild #Retrieves the object for the server that the user joined
+    print("uwu0")
     if category_existance(misc_settings['countMembersChannel'], guild.categories) == 1: #Checks whether the server is contained in pixel's db
         print("uwu1")
         category = get_category(misc_settings['countMembersChannel'], guild.categories) #Retrieves the category where the member count is

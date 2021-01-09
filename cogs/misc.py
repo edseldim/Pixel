@@ -34,15 +34,26 @@ class Misc(commands.Cog):
             print(error)
 
             settings = {   
+                            'bot_id':595011002215563303,
                             'roles_allowed': [243854949522472971],
                             } 
 
             misc_settings = {
+                        'guildId':501861392593453076,
                         'countMembersChannel':[],
                         'dailyGoal': {},
                         'goalChannel': {},
-                        'rank':{}
-                        
+                        'rank':{},
+                        'nightmareMode':{
+                            'role_id': 738813425333043312,
+                            'channels_id':[739127911650557993]
+                        },
+                        'dailyGoalRoles':
+                        {
+                            'ln_sp':738813648369352804,
+                            'ln_en':738813394429411398,
+                        },
+
             }
 
         else:
@@ -76,25 +87,25 @@ class Misc(commands.Cog):
         """Checks if the word that was just sent in a channel has to be 
         deleted"""
 
-        pixel_bot_id = 595011002215563303
+        pixel_bot_id = self.settings["bot_id"]
 
         if message.author.id != pixel_bot_id:
 
             await modules_moderation.react_corrections(self.bot, message)
 
-            if(message.guild.id == 501861392593453076):
-                ultra_hardcore = message.guild.get_role(738813425333043312)
+            if(message.guild.id == self.settings["guildId"]):
+                ultra_hardcore = self.misc_settings["nightmareMode"]["role_id"]
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:
 
                     lang = await modules_misc.detect_language(stripped_msg)
 
-                    if(ultra_hardcore in message.author.roles or message.channel.id == 739127911650557993):
+                    if(ultra_hardcore in message.author.roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 
-                    if(f"{message.author.id}" in self.misc_settings["dailyGoal"]):
-                        learning_eng = message.guild.get_role(738813394429411398)
-                        learning_sp = message.guild.get_role(738813648369352804)
+                    if(f"{message.author.id}" in self.misc_settings["dailyGoal"]): #Daily Goal Feature
+                        learning_eng = self.misc_settings["dailyGoalRoles"]["ln_en"]
+                        learning_sp = self.misc_settings["dailyGoalRoles"]["ln_sp"]
 
                         if learning_eng in message.author.roles:  
                             if lang == 'en':
@@ -155,8 +166,8 @@ class Misc(commands.Cog):
 
     """Spanish server hardcore thanks to @Ryry013#9234"""
     async def sp_serv_hardcore(self, ctx, msg, lang):
-        learning_eng = msg.guild.get_role(738813394429411398)
-        learning_sp = msg.guild.get_role(738813648369352804)
+        learning_eng = self.misc_settings["dailyGoalRoles"]["ln_en"]    
+        learning_sp = self.misc_settings["dailyGoalRoles"]["ln_sp"]
         if learning_eng in msg.author.roles:  # learning English, delete all Spanish
             if lang == 'es':
                 try:

@@ -29,10 +29,10 @@ class Moderation(commands.Cog):
 
             print(error)
 
-            settings = {
-                    'roles_allowed': [243854949522472971],        
-                    } 
-
+            settings = {   
+                            'bot_id':595011002215563303,
+                            'roles_allowed': [243854949522472971],
+                            } 
         else:
 
              pass
@@ -88,8 +88,6 @@ class Moderation(commands.Cog):
 
         """Checks if the word that was just sent in a channel has to be 
         deleted"""
-
-        banned_word = f' {message.content.lower()} '
 
         pixel_bot_id = 595011002215563303
 

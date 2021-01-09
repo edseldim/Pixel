@@ -20,9 +20,10 @@ except Exception as error:
 
             print(error)
 
-            settings = {
-                    'roles_allowed': [243854949522472971],
-                    } 
+            settings = {   
+                            'bot_id':595011002215563303,
+                            'roles_allowed': [243854949522472971],
+                            } 
 
 else:
 
@@ -117,8 +118,6 @@ class Owner(commands.Cog):
                 '__import__': __import__
             }
             exec(compile(parsed, filename="<ast>", mode="exec"), env)
-
-            result = (await eval(f"{fn_name}()", env))
 
             await ctx.message.delete()
 

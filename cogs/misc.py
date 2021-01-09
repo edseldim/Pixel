@@ -76,8 +76,6 @@ class Misc(commands.Cog):
         """Checks if the word that was just sent in a channel has to be 
         deleted"""
 
-        banned_word = f' {message.content.lower()} '
-
         pixel_bot_id = 595011002215563303
 
         if message.author.id != pixel_bot_id:

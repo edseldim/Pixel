@@ -7,6 +7,7 @@ from discord.utils import get
 import ast
 import json
 import sys, traceback
+from discord import Intents
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 

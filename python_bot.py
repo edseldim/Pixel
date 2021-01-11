@@ -11,7 +11,7 @@ import sys, traceback
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
-bot = commands.Bot(command_prefix='p!', description='Created by Edsel Di Meo#6428', owner_id=594956772733878303, activity=discord.Game('p!help'))
+bot = commands.Bot(command_prefix='p!', description='Created by Edsel Di Meo#6428', owner_id=594956772733878303, activity=discord.Game('p!help'), intents=Intents.all())
 
 
 initial_extensions = ['cogs.owner', 'cogs.moderation','cogs.misc','cogs.stats']

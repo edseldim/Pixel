@@ -362,18 +362,12 @@ async def member_count_update(member, misc_settings):
     """Updates the member count"""
 
     guild = member.guild #Retrieves the object for the server that the user joined
-    print("uwu0")
     if category_existance(misc_settings['countMembersChannel'], guild.categories) == 1: #Checks whether the server is contained in pixel's db
-        print("uwu1")
         category = get_category(misc_settings['countMembersChannel'], guild.categories) #Retrieves the category where the member count is
-        print("uwu2")
         for category_db in misc_settings['countMembersChannel']: #Retrieves all the categories saved to find the one pixel will update
-            print("uwu3")
             if category.id == category_db['id']: #Locates the category id in pixel's db for updating purposes
-                print("uwu4")
                 try:
                     await category.edit(name = f"{category_db['name']} ({guild.member_count} MEMBERS)") #updates the category name
-                    print("uwu5")
                 except Forbidden:
                     print(f"**I don't have enough permissions to change {category.name}'s name'") #Error message
     else:

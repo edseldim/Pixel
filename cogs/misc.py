@@ -39,7 +39,7 @@ class Misc(commands.Cog):
                             } 
 
             misc_settings = {
-                        'guildId':501861392593453076,
+                        'guildId':243838819743432704,
                         'countMembersChannel':[],
                         'dailyGoal': {},
                         'goalChannel': {},

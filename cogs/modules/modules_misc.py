@@ -106,6 +106,7 @@ def rem_emoji_url(msg):
 
 
 def _pre_load_language_dection_model():
+    global language_detection_model
     english = []
     spanish = []
     for csv_name in ['principiante.csv', 'avanzado.csv', 'beginner.csv', 'advanced.csv']:

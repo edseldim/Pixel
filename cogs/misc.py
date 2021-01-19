@@ -113,6 +113,7 @@ class Misc(commands.Cog):
                     print(lang)
 
                     if(ultra_hardcore in message.author.roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
+                        print("uwu")
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 
                     if(f"{message.author.id}" in self.misc_settings["dailyGoal"]): #Daily Goal Feature

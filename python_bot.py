@@ -8,7 +8,7 @@ import ast
 import json
 import sys, traceback
 from discord import Intents
-from cogs.modules import modules_moderation as modules_moderation
+from cogs.modules import modules_misc as modules_misc
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -32,7 +32,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await modules_moderation.load_language_dection_model()
+    await modules_misc.load_language_dection_model()
 
 
 with open(f"{dir_path}/APIKey.txt") as f:

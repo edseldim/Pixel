@@ -13,6 +13,7 @@ from sklearn.metrics import confusion_matrix,classification_report
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 dir_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 language_detection_model = None #This variable stores the model that will make predictions

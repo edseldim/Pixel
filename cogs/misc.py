@@ -108,6 +108,7 @@ class Misc(commands.Cog):
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:
 
+                    #lang = await modules_misc.detect_language(stripped_msg)
                     lang = await modules_misc.detect_language(stripped_msg)
                     print(lang)
 

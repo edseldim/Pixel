@@ -4,7 +4,7 @@ import re
 from textblob import TextBlob as tb
 import asyncio
 from functools import partial
-import json, csv
+import csv
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
@@ -87,10 +87,14 @@ def is_emoji(char):
     )
     return any(start <= ord(char) <= end for start, end in EMOJI_MAPPING)
 
+
 _loop = asyncio.get_event_loop()
 
 """thanks to @Ryry013#9234"""
+
+
 def rem_emoji_url(msg):
+
     if isinstance(msg, discord.Message):
         msg = msg.content
     new_msg = _emoji.sub('', _url.sub('', msg))
@@ -98,6 +102,7 @@ def rem_emoji_url(msg):
         if is_emoji(char):
             new_msg = new_msg.replace(char, '').replace('  ', '')
     return new_msg
+
 
 def _pre_load_language_dection_model():
     english = []
@@ -143,7 +148,7 @@ def _pre_load_language_dection_model():
 
         return pipeline
 
-      language_detection_model = make_set(english, spanish, make_set(english, spanish, make_set(english, spanish)))
+    language_detection_model = make_set(english, spanish, make_set(english, spanish, make_set(english, spanish)))
 
 
 def detect_language(text):

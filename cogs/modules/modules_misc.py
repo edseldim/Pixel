@@ -153,7 +153,7 @@ def _pre_load_language_dection_model():
 
 
 def detect_language(text):
-    probs = language_detection_model.langdetect.predict_proba([text])[0]
+    probs = language_detection_model.predict_proba([text])[0]
     if probs[0] > 0.9:
         return 'en'
     elif probs[0] < 0.1:

@@ -104,16 +104,18 @@ class Misc(commands.Cog):
             await modules_moderation.react_corrections(self.bot, message)
 
             if(message.guild.id == self.misc_settings["guildId"]):
+                roles = []
                 ultra_hardcore = self.misc_settings["nightmareMode"]["role_id"]
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:
 
                     #lang = await modules_misc.detect_language(stripped_msg)
                     lang = modules_misc.detect_language(stripped_msg)
-                    print(message.author.roles)
-                    print(ultra_hardcore)
+                    
+                    for role in message.author.roles:
+                        roles.append(role)
 
-                    if(ultra_hardcore in message.author.roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
+                    if(ultra_hardcore in roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
                         print("uwu")
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
 

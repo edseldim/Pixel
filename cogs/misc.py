@@ -123,13 +123,13 @@ class Misc(commands.Cog):
                         learning_eng = self.misc_settings["dailyGoalRoles"]["ln_en"]
                         learning_sp = self.misc_settings["dailyGoalRoles"]["ln_sp"]
 
-                        if learning_eng in message.author.roles:  
+                        if learning_eng in roles:  
                             if lang == 'en':
 
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
                           
-                        elif learning_sp in message.author.roles:  
+                        elif learning_sp in roles:  
                             if lang == 'es':
                                 
                                 await self.goal_completion_checker(message)

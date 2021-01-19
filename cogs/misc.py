@@ -113,7 +113,7 @@ class Misc(commands.Cog):
                     lang = modules_misc.detect_language(stripped_msg)
                     
                     for role in message.author.roles:
-                        roles.append(role.role_id)
+                        roles.append(role.id)
 
                     if(ultra_hardcore in roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
                         print("uwu")

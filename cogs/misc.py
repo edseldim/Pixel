@@ -25,10 +25,6 @@ class Misc(commands.Cog):
 
                 settings = json.load(f)
 
-            with open(f'{dir_path}/misc_settings.json', 'r' ) as f:
-
-                misc_settings = json.load(f)
-
         except Exception as error:
 
             print(error)
@@ -37,6 +33,20 @@ class Misc(commands.Cog):
                             'bot_id':595011002215563303,
                             'roles_allowed': [243854949522472971],
                             } 
+        try:
+
+            with open(f'{dir_path}/misc_settings.json', 'r' ) as f:
+
+                misc_settings = json.load(f)
+
+        except Exception as error:
+
+            # print(error)
+
+            # settings = {   
+            #                 'bot_id':595011002215563303,
+            #                 'roles_allowed': [243854949522472971],
+            #                 } 
 
             misc_settings = {
                         'guildId':243838819743432704,

@@ -75,7 +75,7 @@ class Misc(commands.Cog):
         self.bot = bot 
         self.reset_goals.start()
 
-    @tasks.loop(minutes=1440)
+    @tasks.loop(minutes=5)
     async def reset_goals(self):
         self.misc_settings["dailyGoal"] = {}
         modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")

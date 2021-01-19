@@ -99,6 +99,7 @@ class Misc(commands.Cog):
                 if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:
 
                     lang = await modules_misc.detect_language(stripped_msg)
+                    print(lang)
 
                     if(ultra_hardcore in message.author.roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
                         await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)

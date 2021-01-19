@@ -117,7 +117,7 @@ class Misc(commands.Cog):
 
                     if(ultra_hardcore in roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
                         print("uwu")
-                        await self.sp_serv_hardcore( await self.bot.get_context(message), message, lang)
+                        await self.sp_serv_hardcore( await self.bot.get_context(message), message,roles,lang)
 
                     if(f"{message.author.id}" in self.misc_settings["dailyGoal"]): #Daily Goal Feature
                         learning_eng = self.misc_settings["dailyGoalRoles"]["ln_en"]
@@ -181,17 +181,17 @@ class Misc(commands.Cog):
         self.reset_goals.cancel()
 
     """Spanish server hardcore thanks to @Ryry013#9234"""
-    async def sp_serv_hardcore(self, ctx, msg, lang):
+    async def sp_serv_hardcore(self, ctx, msg,roles,lang):
         learning_eng = self.misc_settings["dailyGoalRoles"]["ln_en"]    
         learning_sp = self.misc_settings["dailyGoalRoles"]["ln_sp"]
-        if learning_eng in msg.author.roles:  # learning English, delete all Spanish
+        if learning_eng in roles:  # learning English, delete all Spanish
             if lang == 'es':
                 try:
                     await msg.delete()
                 except discord.errors.NotFound:
                     return
 
-        elif learning_sp in msg.author.roles:  # learning Spanish, delete all English
+        elif learning_sp in roles:  # learning Spanish, delete all English
             if lang == 'en':
                 try:
                     await msg.delete()

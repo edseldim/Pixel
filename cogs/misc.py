@@ -50,18 +50,18 @@ class Misc(commands.Cog):
 
             misc_settings = {
                         'guildId':243838819743432704,
-                        'countMembersChannel':[],
+                        'countMembersChannel':[{"id": 362397839864627201, "name": "Information"}],
                         'dailyGoal': {},
                         'goalChannel': {},
                         'rank':{},
                         'nightmareMode':{
-                            'role_id': 738813425333043312,
+                            'role_id': 738808953265455154,
                             'channels_id':[739127911650557993]
                         },
                         'dailyGoalRoles':
                         {
-                            'ln_sp':738813648369352804,
-                            'ln_en':738813394429411398,
+                            'ln_sp':297415063302832128,
+                            'ln_en':247021017740869632,
                         },
 
             }

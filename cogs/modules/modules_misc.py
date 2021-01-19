@@ -4,6 +4,18 @@ import re
 from textblob import TextBlob as tb
 import asyncio
 from functools import partial
+import json, csv
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics import confusion_matrix,classification_report
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+dir_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+language_detection_model = None #This variable stores the model that will make predictions
 
 # credit: https://gist.github.com/dperini/729294
 _url = re.compile("""
@@ -87,8 +99,70 @@ def rem_emoji_url(msg):
             new_msg = new_msg.replace(char, '').replace('  ', '')
     return new_msg
 
-def _predetect(text):
+def _pre_load_language_dection_model():
+    english = []
+    spanish = []
+    for csv_name in ['principiante.csv', 'avanzado.csv', 'beginner.csv', 'advanced.csv']:
+        with open(f"{dir_path}/cogs/modules/{csv_name}", newline='', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+            if csv_name in ['principiante.csv', 'avanzado.csv']:
+                for row in reader:
+                    spanish.append(row[2])
+            else:
+                for row in reader:
+                    english.append(row[2])
+
+    def make_set(english, spanish, pipeline=None):
+        if pipeline:
+            eng_pred = pipeline.predict(english)
+            sp_pred = pipeline.predict(spanish)
+            new_english = []
+            new_spanish = []
+            for i in range(len(english)):
+                if eng_pred[i] == 'en':
+                    new_english.append(english[i])
+            for i in range(len(spanish)):
+                if sp_pred[i] == 'sp':
+                    new_spanish.append(spanish[i])
+            spanish = new_spanish
+            english = new_english
+
+        x = np.array(english + spanish)
+        y = np.array(['en'] * len(english) + ['sp'] * len(spanish))
+
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.05, random_state=42)
+        cnt = CountVectorizer(analyzer='char', ngram_range=(2, 2))
+
+        pipeline = Pipeline([
+            ('vectorizer', cnt),
+            ('model', MultinomialNB())
+        ])
+
+        pipeline.fit(x_train, y_train)
+        # y_pred = pipeline.predict(x_test)
+
+        return pipeline
+
+      language_detection_model = make_set(english, spanish, make_set(english, spanish, make_set(english, spanish)))
+
+
+def detect_language(text):
+    probs = language_detection_model.langdetect.predict_proba([text])[0]
+    if probs[0] > 0.9:
+        return 'en'
+    elif probs[0] < 0.1:
+        return 'es'
+    else:
+        return None
+
+
+async def load_language_dection_model():
+    await _loop.run_in_executor(None, _pre_load_language_dection_model)
+
+#Old language detection system
+
+def _predetectblob(text):
     return tb(text).detect_language()
 
-async def detect_language(text):
-    return await _loop.run_in_executor(None, partial(_predetect, text))
+async def detect_languageblob(text):
+    return await _loop.run_in_executor(None, partial(_predetectblob, text))

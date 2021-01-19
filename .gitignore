@@ -11,3 +11,8 @@ banned_words_logger.txt
 /.vscode
 cogs/__pycache__
 cogs/modules/randomwalkpictures
+cogs/modules/advanced.csv
+cogs/modules/avanzado.csv
+cogs/modules/beginner.csv
+cogs/modules/general.csv
+cogs/modules/principiante.csv

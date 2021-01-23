@@ -351,8 +351,8 @@ class Misc(commands.Cog):
         emb = discord.Embed(title = "Goals Leaderboard", color=discord.Color(int('00ff00', 16)))
         char_length = 0
         for i in sort_users:
-            if(i[0]==ctx.message.author.id):
-                mes += f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
+            if(int(i[0])==ctx.message.author.id):
+                mes += f"You: **{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
                 char_length += len(f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n")
                 break
             pos+=1

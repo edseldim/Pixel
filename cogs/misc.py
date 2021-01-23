@@ -363,7 +363,7 @@ class Misc(commands.Cog):
         pos = 0
         for i in sort_users:
             if(int(i[0])==ctx.message.author.id):
-                mes = f"You: **{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
+                mes = f"You: {pos}) {await self.show_member(ctx,i[0])}\n {i[1]}\n"
                 emb.set_footer(text = mes)
                 break
             pos+=1

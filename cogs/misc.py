@@ -350,13 +350,6 @@ class Misc(commands.Cog):
         pos = 1
         emb = discord.Embed(title = "Goals Leaderboard", color=discord.Color(int('00ff00', 16)))
         char_length = 0
-        for i in sort_users:
-            if(int(i[0])==ctx.message.author.id):
-                mes += f"You: **{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
-                char_length += len(f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n")
-                break
-            pos+=1
-        pos = 0
         for i in sort_users:    
             char_length += len(f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n")
             if(char_length < 2048):
@@ -366,10 +359,16 @@ class Misc(commands.Cog):
         emb.add_field(name = "last 30 days",
                         value = mes,
                         inline = False)
+        mes = ""
+        pos = 0
+        for i in sort_users:
+            if(int(i[0])==ctx.message.author.id):
+                mes = f"You: **{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
+                emb.set_footer(text = mes)
+                break
+            pos+=1
 
         await ctx.send(embed = emb)
-
-
 
     @commands.command()
     async def uwu(self, ctx):

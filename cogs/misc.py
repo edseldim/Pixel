@@ -316,7 +316,7 @@ class Misc(commands.Cog):
         member = await modules_moderation.member_converter(ctx, id)
 
         if member:
-            name = f"{member.name}#{member.discriminator} ({member.id})"
+            name = f"{member.name}"
 
             return name
 
@@ -349,10 +349,19 @@ class Misc(commands.Cog):
         sort_users = sorted(emb_dict.items(), key = lambda x: x[1], reverse=True)
         pos = 1
         emb = discord.Embed(title = "Goals Leaderboard", color=discord.Color(int('00ff00', 16)))
-
-        for i in sort_users:    
-            mes += f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
+        char_length = 0
+        for i in sort_users:
+            if(i[0]==ctx.message.author.id):
+                mes += f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
+                char_length += len(f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n")
+                break
             pos+=1
+        pos = 0
+        for i in sort_users:    
+            char_length += len(f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n")
+            if(char_length < 2048):
+                mes += f"**{pos}) {await self.show_member(ctx,i[0])}**\n {i[1]}\n"
+                pos+=1
 
         emb.add_field(name = "last 30 days",
                         value = mes,

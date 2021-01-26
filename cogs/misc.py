@@ -65,9 +65,9 @@ class Misc(commands.Cog):
     async def reset_goals(self):
         if misc_settings["local_day"] != time.localtime().tm_mday:
             misc_settings["local_day"] = time.localtime().tm_mday
-            for user_goal in misc_setting["dailyGoal"]:
-                if misc_setting["dailyGoal"][f"{user_goal}"]["date"].tm_mday != misc_settings["local_day"]:
-                    del misc_setting["dailyGoal"][f"{user_goal}"]
+            for user_goal in misc_settings["dailyGoal"]:
+                if misc_settings["dailyGoal"][f"{user_goal}"]["date"].tm_mday != misc_settings["local_day"]:
+                    del misc_settings["dailyGoal"][f"{user_goal}"]
             modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
     @commands.Cog.listener()

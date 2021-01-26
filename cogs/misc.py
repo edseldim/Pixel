@@ -6,7 +6,8 @@ from .modules import modules_misc as modules_misc
 import json
 import os
 import asyncio
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import time
 from random import randint, choice
 import io
 from textblob import TextBlob as tb
@@ -15,13 +16,14 @@ from datetime import date
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 
+
 class Misc(commands.Cog):
 
     def __init__(self, bot):
 
         try:
 
-            with open(f'{dir_path}/db.json', 'r' ) as f:
+            with open(f'{dir_path}/db.json', 'r') as f:
 
                 settings = json.load(f)
 
@@ -29,57 +31,44 @@ class Misc(commands.Cog):
 
             print(error)
 
-            settings = {   
-                            'bot_id':595011002215563303,
-                            'roles_allowed': [243854949522472971],
-                            } 
+            settings = {'bot_id': 595011002215563303,
+                        'roles_allowed': [243854949522472971]}
         try:
 
-            with open(f'{dir_path}/misc_settings.json', 'r' ) as f:
+            with open(f'{dir_path}/misc_settings.json', 'r') as f:
 
                 misc_settings = json.load(f)
 
         except Exception as error:
 
-            # print(error)
-
-            # settings = {   
-            #                 'bot_id':595011002215563303,
-            #                 'roles_allowed': [243854949522472971],
-            #                 } 
-
-            misc_settings = {
-                        'guildId':243838819743432704,
-                        'countMembersChannel':[{"id": 362397839864627201, "name": "Information"}],
-                        'dailyGoal': {},
-                        'goalChannel': {},
-                        'rank':{},
-                        'nightmareMode':{
-                            'role_id': 738808953265455154,
-                            'channels_id':[739127911650557993]
-                        },
-                        'dailyGoalRoles':
-                        {
-                            'ln_sp':297415063302832128,
-                            'ln_en':247021017740869632,
-                        },
-
-            }
+            misc_settings = {'guildId': 243838819743432704,
+                             'local_day': time.localtime().tm_mday,
+                             'countMembersChannel': [{"id": 362397839864627201, "name": "Information"}],
+                             'dailyGoal': {},
+                             'goalChannel': {},
+                             'rank': {},
+                             'nightmareMode': {'role_id': 738808953265455154,
+                                               'channels_id': [739127911650557993]},
+                             'dailyGoalRoles': {'ln_sp': 297415063302832128,
+                                                'ln_en': 247021017740869632}}
 
         else:
 
             pass
 
-        self.settings = settings 
+        self.settings = settings
         self.misc_settings = misc_settings
-        self.bot = bot 
+        self.bot = bot
         self.reset_goals.start()
 
-    @tasks.loop(minutes=1440)
+    @tasks.loop(minutes=10)
     async def reset_goals(self):
-        self.misc_settings["dailyGoal"] = {}
-        modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-        
+        if misc_settings["local_day"] != time.localtime().tm_mday:
+            misc_settings["local_day"] = time.localtime().tm_mday
+            for user_goal in misc_setting["dailyGoal"]:
+                if misc_setting["dailyGoal"][f"{user_goal}"]["date"].tm_mday != misc_settings["local_day"]:
+                    del misc_setting["dailyGoal"][f"{user_goal}"]
+            modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -108,37 +97,27 @@ class Misc(commands.Cog):
                 ultra_hardcore = self.misc_settings["nightmareMode"]["role_id"]
                 stripped_msg = modules_misc.rem_emoji_url(message)
                 if stripped_msg[0] not in 'p=;!>' and len(stripped_msg) > 5:
-
-                    #lang = await modules_misc.detect_language(stripped_msg)
                     lang = modules_misc.detect_language(stripped_msg)
-                    
                     for role in message.author.roles:
                         roles.append(role.id)
-
-                    if(ultra_hardcore in roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"] ): #Nightmare mode 
+                    if(ultra_hardcore in roles or message.channel.id in self.misc_settings["nightmareMode"]["channels_id"]):  # Nightmare mode
                         print("uwu")
-                        await self.sp_serv_hardcore( await self.bot.get_context(message), message,roles,lang)
-
-                    if(f"{message.author.id}" in self.misc_settings["dailyGoal"]): #Daily Goal Feature
+                        await self.sp_serv_hardcore(await self.bot.get_context(message), message, roles, lang)
+                    if(f"{message.author.id}" in self.misc_settings["dailyGoal"]):  # Daily Goal Feature
                         learning_eng = self.misc_settings["dailyGoalRoles"]["ln_en"]
                         learning_sp = self.misc_settings["dailyGoalRoles"]["ln_sp"]
-
-                        if learning_eng in roles:  
+                        if learning_eng in roles:
                             if lang == 'en':
-
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                          
-                        elif learning_sp in roles:  
+                        elif learning_sp in roles:
                             if lang == 'es':
-                                
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                                        
 
     async def goal_completion_checker(self, message):
 
-        self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]+=1
+        self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"] += 1
         modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
         messages_sent = self.misc_settings["dailyGoal"][f"{message.author.id}"]["messages_sent"]
         goal = self.misc_settings["dailyGoal"][f"{message.author.id}"]["goal"]
@@ -148,12 +127,12 @@ class Misc(commands.Cog):
 
                 channel = message.guild.get_channel(int(self.misc_settings["goalChannel"][f"{message.guild.id}"]))
 
-                await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳"  
-                +"You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
+                await channel.send(f"<@{message.author.id}> You have successfully reached today's goal. 🥳" +
+                                   "You should be proud of how hard you have worked today, and I recommend you to take a break because you deserve it ❤️ Congratulations!")
 
                 await self.rank_updater(message, channel)
 
-                del self.misc_settings["dailyGoal"][f"{message.author.id}"] 
+                del self.misc_settings["dailyGoal"][f"{message.author.id}"]
 
 
     async def rank_updater(self, message, channel):
@@ -202,16 +181,12 @@ class Misc(commands.Cog):
     async def set_goal(self, ctx, nmessages):
 
         """Sets a goal
-        
         Parameters:
-        
         nmessages: the amount of messages of your goal"""
-            
         if f"{ctx.message.author.id}" in self.misc_settings["dailyGoal"]:
-                await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
-                modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-                return
-        
+            await ctx.send("You already have a goal, try completing or deleting it using ``p!delGoal``")
+            modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+            return
         else:
 
             if(int(nmessages) >= 20):
@@ -225,11 +200,10 @@ class Misc(commands.Cog):
                 await ctx.send("Goal added succesfully! ✅ You have one day to complete it, and you can see your goal's info by typing ``p!show_goal`` \n\n **Remember to set a language learning role otherwise this won't work for you**")
 
                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
-            
             else:
 
                 await ctx.send("Error: the minimum amount of messages for a goal has to be 20")
-    
+
     @commands.command()
     async def del_goal(self, ctx):
 

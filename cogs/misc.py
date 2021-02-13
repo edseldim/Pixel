@@ -74,7 +74,7 @@ class Misc(commands.Cog):
             modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
     @commands.Cog.listener()
-    async def on_member_update(before, after):
+    async def on_member_update(self, before, after):
 
         if len(before.roles) == 0 and len(after.roles) > 0:
             bot_id = await self.bot.application_info().id

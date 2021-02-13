@@ -76,7 +76,7 @@ class Misc(commands.Cog):
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
 
-        if len(before.roles) == 1 and len(after.roles) > 1:
+        if len(before.roles) == 3 and len(after.roles) > 3:
             bot_info = await self.bot.application_info()
             if bot_info.id == 595011002215563303:  # esp eng pixel
                 await self.bot.get_guild(self.misc_settings['guildId']).get_channel(296491080881537024).send(f'Welcome / Bienvenido/a, <@{after.id}>!')

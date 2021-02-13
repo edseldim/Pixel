@@ -75,13 +75,12 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
-        print('before: '+str(len(before.roles)))
-        print('after: '+str(len(after.roles)))
+
         if len(before.roles) == 1 and len(after.roles) > 1:
-            bot_id = await self.bot.application_info().id
+            bot_info = await self.bot.application_info()
             # if bot_id == 595011002215563303:  # esp eng pixel
                 # await ctx.bot.get_guild(self.misc_settings['guildId']).get_channel(296491080881537024).send(f'Welcome / Bienvenido, @{after.id} !')
-            if bot_id == 635114071175331852:  # pixel test
+            if bot_info.id == 635114071175331852:  # pixel test
                 await ctx.bot.get_guild(self.misc_settings['guildId']).get_channel(501861392593453078).send(f'Welcome / Bienvenido, @{after.id} !')
 
     @commands.Cog.listener()

@@ -75,7 +75,8 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
-
+        print('before: '+str(before.roles))
+        print('after: '+str(after.roles))
         if len(before.roles) == 0 and len(after.roles) > 0:
             bot_id = await self.bot.application_info().id
             # if bot_id == 595011002215563303:  # esp eng pixel

@@ -74,6 +74,16 @@ class Misc(commands.Cog):
             modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
     @commands.Cog.listener()
+    async def on_member_update(before, after):
+
+        if len(before.roles) == 0 and len(after.roles) > 0:
+            bot_id = await self.bot.application_info().id
+            # if bot_id == 595011002215563303:  # esp eng pixel
+                # await ctx.bot.get_guild(self.misc_settings['guildId']).get_channel(296491080881537024).send(f'Welcome / Bienvenido, @{after.id} !')
+            if bot_id == 635114071175331852:  # pixel test
+                await ctx.bot.get_guild(self.misc_settings['guildId']).get_channel(501861392593453078).send(f'Welcome / Bienvenido, @{after.id} !')
+
+    @commands.Cog.listener()
     async def on_member_join(self, member):
 
         await modules_moderation.member_count_update(member, self.misc_settings)

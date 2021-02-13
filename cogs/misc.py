@@ -78,10 +78,10 @@ class Misc(commands.Cog):
 
         if len(before.roles) == 1 and len(after.roles) > 1:
             bot_info = await self.bot.application_info()
-            # if bot_id == 595011002215563303:  # esp eng pixel
-                # await ctx.bot.get_guild(self.misc_settings['guildId']).get_channel(296491080881537024).send(f'Welcome / Bienvenido, @{after.id} !')
-            if bot_info.id == 635114071175331852:  # pixel test
-                await self.bot.get_guild(self.misc_settings['guildId']).get_channel(501861392593453078).send(f'Welcome / Bienvenido, <@{after.id}> !')
+            if bot_info.id == 595011002215563303:  # esp eng pixel
+                await self.bot.get_guild(self.misc_settings['guildId']).get_channel(296491080881537024).send(f'Welcome / Bienvenido/a, <@{after.id}>!')
+            elif bot_info.id == 635114071175331852:  # pixel test
+                await self.bot.get_guild(self.misc_settings['guildId']).get_channel(501861392593453078).send(f'Welcome / Bienvenido/a, <@{after.id}>!')
 
     @commands.Cog.listener()
     async def on_member_join(self, member):

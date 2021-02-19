@@ -138,11 +138,11 @@ class Misc(commands.Cog):
         """Checks if the word that was just sent in a channel has to be 
         deleted"""
 
-        pixel_bot_id = self.settings["bot_id"]
+        # pixel_bot_id = self.settings["bot_id"]
+        bot_info = await self.bot.application_info()
 
-        if message.author.id != pixel_bot_id:
+        if bot_info.id != pixel_bot_id:
             welcome_channel = None
-            bot_info = await self.bot.application_info()
             if bot_info.id == 595011002215563303:  # esp eng pixel
                 welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
             elif bot_info.id == 635114071175331852:  # pixel test

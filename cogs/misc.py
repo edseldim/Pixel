@@ -159,7 +159,7 @@ class Misc(commands.Cog):
                                    f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
                                    f"__el inglés__, __el español__, __ambos__ u __otro__?")
 
-        def check(m):
+        def check(msg):
             if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
                 return True
             else:

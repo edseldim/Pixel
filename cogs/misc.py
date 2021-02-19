@@ -147,6 +147,7 @@ class Misc(commands.Cog):
 
     async def welcomeSetup(self, member):
         welcome_channel = None
+        bot_info = await self.bot.application_info()
         if bot_info.id == 595011002215563303:  # esp eng pixel
             welcome_channel = await self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
         elif bot_info.id == 635114071175331852:  # pixel test

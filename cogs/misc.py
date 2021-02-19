@@ -58,7 +58,7 @@ class Misc(commands.Cog):
 
             pass
 
-        misc_settings["welcomeFeature"] = 0
+        misc_settings["welcomeFeature"] = 1
         self.settings = settings
         self.misc_settings = misc_settings
         self.bot = bot
@@ -159,7 +159,7 @@ class Misc(commands.Cog):
                                    f"__el inglés__, __el español__, __ambos__ u __otro__?")
 
         msg = await self.bot.wait_for('message', check=check, timeout=1800)
-        
+
         while True:
             if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
                 break

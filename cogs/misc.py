@@ -149,9 +149,9 @@ class Misc(commands.Cog):
         welcome_channel = None
         bot_info = await self.bot.application_info()
         if bot_info.id == 595011002215563303:  # esp eng pixel
-            welcome_channel = await self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
         elif bot_info.id == 635114071175331852:  # pixel test
-            welcome_channel = await self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
+            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
         await welcome_channel.send(f"{member.mention}\n"
                                    f"Hello! Welcome to the server!          Is your **native language**: "
@@ -159,13 +159,19 @@ class Misc(commands.Cog):
                                    f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
                                    f"__el inglés__, __el español__, __ambos__ u __otro__?")
 
+        def check(m):
+            if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
+                return True
+            else:
+                return False
+
         msg = await self.bot.wait_for('message', check=check, timeout=1800)
 
-        while True:
-            if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
-                break
-            else:
-                msg = await self.bot.wait_for('message', check=check, timeout=1800)
+        # while True:
+        # if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
+        # break
+        # else:
+        # msg = await self.bot.wait_for('message', check=check, timeout=1800)
 
         content = re.sub('> .*\n', '', msg.content.casefold())  # remove quotes in case the user quotes bot
         content = content.translate(str.maketrans('', '', string.punctuation))  # remove punctuation

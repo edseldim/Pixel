@@ -102,7 +102,7 @@ class Misc(commands.Cog):
         await modules_moderation.member_count_update(member, self.misc_settings)
 
         if self.misc_settings["welcomeFeature"] == 1:  # the welcome feature is on
-            await welcomeSetup(member)
+            await self.welcomeSetup(member)
 
 
     @commands.Cog.listener()

@@ -64,16 +64,24 @@ class Misc(commands.Cog):
         self.misc_settings = misc_settings
         self.bot = bot
         self.reset_goals.start()
+        welcome_channel = None
+        bot_info = await self.bot.application_info()
+        if bot_info.id == 595011002215563303:  # esp eng pixel
+            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+        elif bot_info.id == 635114071175331852:  # pixel test
+            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
-    @tasks.loop(minutes=5)
-    async def is_rai_down(self):
+        misc_settings["welcomeChannel"] = welcome_channel
 
-        rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
-        if str(rai_obj.status) == 'offline':
-            self.misc_settings["welcomeFeature"] = 1  # the welcome feature is set to on
-        else:
-            if self.misc_settings["welcomeFeature"] == 1:  # if the welcome feature is set to on
-                self.misc_settings["welcomeFeature"] = 0  # the welcome feature is set to off
+    # @tasks.loop(minutes=5)
+    # async def is_rai_down(self):
+
+    #     rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
+    #     if str(rai_obj.status) == 'offline':
+    #         self.misc_settings["welcomeFeature"] = 1  # the welcome feature is set to on
+    #     else:
+    #         if self.misc_settings["welcomeFeature"] == 1:  # if the welcome feature is set to on
+    #             self.misc_settings["welcomeFeature"] = 0  # the welcome feature is set to off
 
     @tasks.loop(minutes=10)
     async def reset_goals(self):
@@ -101,10 +109,14 @@ class Misc(commands.Cog):
     async def on_member_join(self, member):
 
         await modules_moderation.member_count_update(member, self.misc_settings)
-
-        if self.misc_settings["welcomeFeature"] == 1:  # the welcome feature is on
-            await self.welcomeSetup(member)
-
+        rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
+        if str(rai_obj.status) == 'online':
+            await self.misc_settings["welcomeChannel"].send(f"{member.mention}\n"
+                                                            f"Hello! Welcome to the server!          Is your **native language**: "
+                                                            f"__English__, __Spanish__, __both__, or __neither__?\n"
+                                                            f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
+                                                            f"__el inglés__, __el español__, __ambos__ u __otro__?")
+            # await self.welcomeSetup(member)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -120,6 +132,11 @@ class Misc(commands.Cog):
         pixel_bot_id = self.settings["bot_id"]
 
         if message.author.id != pixel_bot_id:
+
+            if len(message.author.roles) == 3 and message.channel.id == self.misc_settings["welcomeChannel"].id:
+                rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
+                if str(rai_obj.status) == 'online':
+                    await self.welcomeSetup(message)
 
             await modules_moderation.react_corrections(self.bot, message)
 
@@ -146,27 +163,27 @@ class Misc(commands.Cog):
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
-    async def welcomeSetup(self, member):
-        welcome_channel = None
-        bot_info = await self.bot.application_info()
-        if bot_info.id == 595011002215563303:  # esp eng pixel
-            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
-        elif bot_info.id == 635114071175331852:  # pixel test
-            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
+    async def welcomeSetup(self, msg):
+        # welcome_channel = None
+        # bot_info = await self.bot.application_info()
+        # if bot_info.id == 595011002215563303:  # esp eng pixel
+        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+        # elif bot_info.id == 635114071175331852:  # pixel test
+        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
-        await welcome_channel.send(f"{member.mention}\n"
-                                   f"Hello! Welcome to the server!          Is your **native language**: "
-                                   f"__English__, __Spanish__, __both__, or __neither__?\n"
-                                   f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
-                                   f"__el inglés__, __el español__, __ambos__ u __otro__?")
+        # await welcome_channel.send(f"{member.mention}\n"
+        #                            f"Hello! Welcome to the server!          Is your **native language**: "
+        #                            f"__English__, __Spanish__, __both__, or __neither__?\n"
+        #                            f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
+        #                            f"__el inglés__, __el español__, __ambos__ u __otro__?")
 
-        def check(msg):
-            if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
-                return True
-            else:
-                return False
+        # def check(msg):
+        #     if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
+        #         return True
+        #     else:
+        #         return False
 
-        msg = await self.bot.wait_for('message', check=check, timeout=1800)
+        # msg = await self.bot.wait_for('message', check=check, timeout=1800)
 
         # while True:
         # if msg.author.id == member.id and msg.channel.id == welcome_channel.id:

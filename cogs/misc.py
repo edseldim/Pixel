@@ -110,7 +110,7 @@ class Misc(commands.Cog):
 
         await modules_moderation.member_count_update(member, self.misc_settings)
 
-        rai_obj = self.bot.get_user(270366726737231884)
+        rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
         welcome_channel = None
         bot_info = await self.bot.application_info()
         if bot_info.id == 595011002215563303:  # esp eng pixel
@@ -149,7 +149,7 @@ class Misc(commands.Cog):
                 welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
             if len(message.author.roles) == 3 and message.channel.id == welcome_channel.id:
-                rai_obj = self.bot.get_user(270366726737231884)
+                rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
                 if str(rai_obj.status) == 'online':
                     await self.welcomeSetup(message)
 

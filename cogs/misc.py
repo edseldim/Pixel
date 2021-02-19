@@ -22,7 +22,7 @@ dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 
 class Misc(commands.Cog):
 
-    async def __init__(self, bot):
+    def __init__(self, bot):
 
         try:
 
@@ -64,14 +64,14 @@ class Misc(commands.Cog):
         self.misc_settings = misc_settings
         self.bot = bot
         self.reset_goals.start()
-        welcome_channel = None
-        bot_info = await self.bot.application_info()
-        if bot_info.id == 595011002215563303:  # esp eng pixel
-            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
-        elif bot_info.id == 635114071175331852:  # pixel test
-            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
+        # welcome_channel = None
+        # bot_info = await self.bot.application_info()
+        # if bot_info.id == 595011002215563303:  # esp eng pixel
+        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+        # elif bot_info.id == 635114071175331852:  # pixel test
+        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
-        misc_settings["welcomeChannel"] = welcome_channel
+        # misc_settings["welcomeChannel"] = welcome_channel
 
     # @tasks.loop(minutes=5)
     # async def is_rai_down(self):
@@ -109,13 +109,22 @@ class Misc(commands.Cog):
     async def on_member_join(self, member):
 
         await modules_moderation.member_count_update(member, self.misc_settings)
+
         rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
+        welcome_channel = None
+        bot_info = await self.bot.application_info()
+        if bot_info.id == 595011002215563303:  # esp eng pixel
+            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+        elif bot_info.id == 635114071175331852:  # pixel test
+            welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
+
         if str(rai_obj.status) == 'online':
-            await self.misc_settings["welcomeChannel"].send(f"{member.mention}\n"
-                                                            f"Hello! Welcome to the server!          Is your **native language**: "
-                                                            f"__English__, __Spanish__, __both__, or __neither__?\n"
-                                                            f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
-                                                            f"__el inglés__, __el español__, __ambos__ u __otro__?")
+            await welcome_channel.send(f"{member.mention}\n"
+                                       f"Hello! Welcome to the server!          Is your **native language**: "
+                                       f"__English__, __Spanish__, __both__, or __neither__?\n"
+                                       f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
+                                       f"__el inglés__, __el español__, __ambos__ u __otro__?")
+            
             # await self.welcomeSetup(member)
 
     @commands.Cog.listener()
@@ -132,8 +141,14 @@ class Misc(commands.Cog):
         pixel_bot_id = self.settings["bot_id"]
 
         if message.author.id != pixel_bot_id:
+            welcome_channel = None
+            bot_info = await self.bot.application_info()
+            if bot_info.id == 595011002215563303:  # esp eng pixel
+                welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+            elif bot_info.id == 635114071175331852:  # pixel test
+                welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
-            if len(message.author.roles) == 3 and message.channel.id == self.misc_settings["welcomeChannel"].id:
+            if len(message.author.roles) == 3 and message.channel.id == welcome_channel.id:
                 rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
                 if str(rai_obj.status) == 'online':
                     await self.welcomeSetup(message)

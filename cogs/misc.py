@@ -15,6 +15,7 @@ import time
 import re
 from datetime import datetime, timedelta, date
 import string
+from Levenshtein import distance as LDist
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 
@@ -184,7 +185,7 @@ class Misc(commands.Cog):
             english_role = msg.guild.get_role(243853718758359040)
             spanish_role = msg.guild.get_role(243854128424550401)
             other_role = msg.guild.get_role(247020385730691073)
-            
+
         elif bot_info.id == 635114071175331852:  # pixel test
             english_role = msg.guild.get_role(812126949157634068)
             spanish_role = msg.guild.get_role(738813650738872380)
@@ -221,6 +222,8 @@ class Misc(commands.Cog):
                             content_word.startswith('fluent'):
                         skip_next_word = True  # if they say any of these words, skip the *next* word
                         continue  # example: "I'm learning English, but native Spanish", skip "English"
+                    if LDist(language_word, content_word) < 3:
+                        language_score[language[0]] += 1
 
         check_language(english, 0)  # run the function I just defined four times, once for each of these lists
         check_language(spanish, 1)

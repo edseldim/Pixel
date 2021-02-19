@@ -141,7 +141,7 @@ class Misc(commands.Cog):
         # pixel_bot_id = self.settings["bot_id"]
         bot_info = await self.bot.application_info()
 
-        if bot_info.id != pixel_bot_id:
+        if message.author.id != bot_info.id:
             welcome_channel = None
             if bot_info.id == 595011002215563303:  # esp eng pixel
                 welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)

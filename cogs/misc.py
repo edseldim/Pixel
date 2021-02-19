@@ -259,14 +259,14 @@ class Misc(commands.Cog):
             txt1 = " I've given you both roles! ¡Te he asignado ambos roles! "
             await msg.author.add_roles(english_role, spanish_role)
 
-        await msg.channel.send(text1)
+        await msg.channel.send(txt1)
 
         txt2 = "You can add more roles in <#703075065016877066>:\n" \
                "Puedes añadirte más en <#703075065016877066>:\n\n" \
                "Before using the server, please read the rules in <#243859172268048385>.\n" \
                "Antes de usar el servidor, por favor lee las reglas en <#499544213466120192>."
 
-        await msg.channel.send(text2)
+        await msg.channel.send(txt2)
 
     async def goal_completion_checker(self, message):
 

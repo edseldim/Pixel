@@ -180,9 +180,16 @@ class Misc(commands.Cog):
                 return  # ignore messages that are just these single words
         if msg.content == '<@270366726737231884>':  # ping to Rai
             return  # ignore pings to Rai
-        english_role = msg.guild.get_role(243853718758359040)
-        spanish_role = msg.guild.get_role(243854128424550401)
-        other_role = msg.guild.get_role(247020385730691073)
+        if bot_info.id == 595011002215563303:  # esp eng pixel
+            english_role = msg.guild.get_role(243853718758359040)
+            spanish_role = msg.guild.get_role(243854128424550401)
+            other_role = msg.guild.get_role(247020385730691073)
+            
+        elif bot_info.id == 635114071175331852:  # pixel test
+            english_role = msg.guild.get_role(812126949157634068)
+            spanish_role = msg.guild.get_role(738813650738872380)
+            other_role = msg.guild.get_role(812126954886135858)
+
         for role in [english_role, spanish_role, other_role]:
             if role in msg.author.roles:
                 return  # ignore messages by users with tags already

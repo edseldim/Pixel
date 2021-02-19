@@ -118,7 +118,7 @@ class Misc(commands.Cog):
         elif bot_info.id == 635114071175331852:  # pixel test
             welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
 
-        if str(rai_obj.status) == 'online':
+        if str(rai_obj.status) == 'offline':
             await welcome_channel.send(f"{member.mention}\n"
                                        f"Hello! Welcome to the server!          Is your **native language**: "
                                        f"__English__, __Spanish__, __both__, or __neither__?\n"
@@ -150,7 +150,7 @@ class Misc(commands.Cog):
 
             if len(message.author.roles) == 3 and message.channel.id == welcome_channel.id:
                 rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
-                if str(rai_obj.status) == 'online':
+                if str(rai_obj.status) == 'offline':
                     await self.welcomeSetup(message)
 
             await modules_moderation.react_corrections(self.bot, message)

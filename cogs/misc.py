@@ -22,7 +22,7 @@ dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 
 class Misc(commands.Cog):
 
-    def __init__(self, bot):
+    async def __init__(self, bot):
 
         try:
 

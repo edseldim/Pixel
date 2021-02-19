@@ -12,7 +12,9 @@ from random import randint, choice
 import io
 from textblob import TextBlob as tb
 import time
-from datetime import date
+import re
+from datetime import datetime, timedelta, date
+import string
 
 dir_path = os.path.dirname(os.path.realpath('python_bot.py'))
 
@@ -56,10 +58,21 @@ class Misc(commands.Cog):
 
             pass
 
+        misc_settings["welcomeFeature"] = 0
         self.settings = settings
         self.misc_settings = misc_settings
         self.bot = bot
         self.reset_goals.start()
+
+    @tasks.loop(minutes=5)
+    async def is_rai_down(self):
+
+        rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
+        if str(rai_obj.status) == 'offline':
+            self.misc_settings["welcomeFeature"] = 1  # the welcome feature is set to on
+        else:
+            if self.misc_settings["welcomeFeature"] == 1:  # if the welcome feature is set to on
+                self.misc_settings["welcomeFeature"] = 0  # the welcome feature is set to off
 
     @tasks.loop(minutes=10)
     async def reset_goals(self):
@@ -87,6 +100,10 @@ class Misc(commands.Cog):
     async def on_member_join(self, member):
 
         await modules_moderation.member_count_update(member, self.misc_settings)
+
+        if misc_settings["welcomeFeature"] == 1:  # the welcome feature is on
+            await welcomeSetup(member)
+
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -127,6 +144,106 @@ class Misc(commands.Cog):
                             if lang == 'es':
                                 await self.goal_completion_checker(message)
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
+
+    async def welcomeSetup(self, member):
+        welcome_channel = await self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
+        msg = await self.bot.wait_for('message', check=check, timeout=1800)
+        while True:
+            if msg.author.id == member.id and msg.channel.id == 243838819743432704:
+                break
+            else:
+                msg = await self.bot.wait_for('message', check=check, timeout=1800)
+
+        await welcome_channel.send(f"{member.mention}\n"
+                                   f"Hello! Welcome to the server!          Is your **native language**: "
+                                   f"__English__, __Spanish__, __both__, or __neither__?\n"
+                                   f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
+                                   f"__el inglés__, __el español__, __ambos__ u __otro__?")
+
+        content = re.sub('> .*\n', '', msg.content.casefold())  # remove quotes in case the user quotes bot
+        content = content.translate(str.maketrans('', '', string.punctuation))  # remove punctuation
+        for word in ['hello', 'hi', 'hola', 'thanks', 'gracias']:
+            if content == word:
+                return  # ignore messages that are just these single words
+        if msg.content == '<@270366726737231884>':  # ping to Rai
+            return  # ignore pings to Rai
+        english_role = msg.guild.get_role(243853718758359040)
+        spanish_role = msg.guild.get_role(243854128424550401)
+        other_role = msg.guild.get_role(247020385730691073)
+        for role in [english_role, spanish_role, other_role]:
+            if role in msg.author.roles:
+                return  # ignore messages by users with tags already
+        if datetime.utcnow() - msg.author.joined_at < timedelta(seconds=3):
+            return
+
+        english = ['english', 'inglés', 'anglohablante', 'angloparlante']
+        spanish = ['spanish', 'español', 'hispanohablante', 'hispanoparlante', 'castellano']
+        other = ['other', 'neither', 'otro', 'otra', 'arabic', 'french', 'árabe', 'francés', 'portuguese',
+                 'brazil', 'portuguesa', 'brazilian']
+        both = ['both', 'ambos', 'los dos']
+        txt1 = ''
+        language_score = {'english': 0, 'spanish': 0, 'other': 0, 'both': 0}  # eng, sp, other, both
+        split = content.split()
+
+        def check_language(language, index):
+            skip_next_word = False  # just defining the variable
+            for language_word in language:  # language = one of the four word lists above
+                for content_word in split:  # content_word = the words in their message
+                    if len(content_word) <= 3:
+                        continue  # skip words three letters or less
+                    if content_word in ['there']:
+                        continue  # this triggers the word "other" so I skip it
+                    if skip_next_word:  # if i marked this true from a previous loop...
+                        skip_next_word = False  # ...first, reset it to false...
+                        continue  # then skip this word
+                    if content_word.startswith("learn") or content_word.startswith('aprend') \
+                            or content_word.startswith('estud') or content_word.startswith('stud') or \
+                            content_word.startswith('fluent'):
+                        skip_next_word = True  # if they say any of these words, skip the *next* word
+                        continue  # example: "I'm learning English, but native Spanish", skip "English"
+
+        check_language(english, 0)  # run the function I just defined four times, once for each of these lists
+        check_language(spanish, 1)
+        check_language(other, 2)
+        check_language(both, 3)
+
+        num_of_hits = 0
+        for lang in language_score:
+            if language_score[lang]:  # will add 1 if there's any value in that dictionary entry
+                num_of_hits += 1  # so "english spanish" gives 2, but "english english" gives 1
+
+        if num_of_hits != 1:  # the bot found more than one language statement in their message, so ask again
+            await msg.channel.send(f"{msg.author.mention}\n"
+                                   f"Hello! Welcome to the server!          Is your **native language**: "
+                                   f"__English__, __Spanish__, __both__, or __neither__?\n"
+                                   f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
+                                   f"__el inglés__, __el español__, __ambos__ u __otro__?")
+            return
+
+        if msg.content.startswith(';') or msg.content.startswith('.'):
+            return
+
+        if language_score['english']:
+            txt1 = " I've given you the `English Native` role! ¡Te he asignado el rol de `English Native`!\n\n"
+            await msg.author.add_roles(english_role)
+        if language_score['spanish']:
+            txt1 = " I've given you the `Spanish Native` role! ¡Te he asignado el rol de `Spanish Native!`\n\n"
+            await msg.author.add_roles(spanish_role)
+        if language_score['other']:
+            txt1 = " I've given you the `Other Native` role! ¡Te he asignado el rol de `Other Native!`\n\n"
+            await msg.author.add_roles(other_role)
+        if language_score['both']:
+            txt1 = " I've given you both roles! ¡Te he asignado ambos roles! "
+            await msg.author.add_roles(english_role, spanish_role)
+
+        await msg.channel.send(text1)
+
+        txt2 = "You can add more roles in <#703075065016877066>:\n" \
+               "Puedes añadirte más en <#703075065016877066>:\n\n" \
+               "Before using the server, please read the rules in <#243859172268048385>.\n" \
+               "Antes de usar el servidor, por favor lee las reglas en <#499544213466120192>."
+
+        await msg.channel.send(text2)
 
     async def goal_completion_checker(self, message):
 

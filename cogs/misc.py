@@ -108,8 +108,15 @@ class Misc(commands.Cog):
                                        f"__el inglés__, __el español__, __ambos__ u __otro__?")
 
         if self.misc_settings['notify_on_joining'] == 1:
-            await ctx.guild.get_member(581324505331400733).send(f"{member.mention} has just joined!")
-            await ctx.guild.get_member(581324505331400733).send(f"{member.mention} has just joined!")
+            try:
+                await self.bot.get_guild(self.misc_settings['guildId']).get_member(581324505331400733).send(f"{member.mention} has just joined!")
+            except Exception as e:
+                print("User 581324505331400733 not found")
+
+            try:
+                await self.bot.get_guild(self.misc_settings['guildId']).get_member(581324505331400733).send(f"{member.mention} has just joined!")
+            except Exception as e:
+                print("User 581324505331400733 not found")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):

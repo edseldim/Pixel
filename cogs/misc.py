@@ -59,29 +59,11 @@ class Misc(commands.Cog):
 
             pass
 
-        misc_settings["welcomeFeature"] = 1
+        misc_settings["notify_on_joining"] = 0
         self.settings = settings
         self.misc_settings = misc_settings
         self.bot = bot
         self.reset_goals.start()
-        # welcome_channel = None
-        # bot_info = await self.bot.application_info()
-        # if bot_info.id == 595011002215563303:  # esp eng pixel
-        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
-        # elif bot_info.id == 635114071175331852:  # pixel test
-        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
-
-        # misc_settings["welcomeChannel"] = welcome_channel
-
-    # @tasks.loop(minutes=5)
-    # async def is_rai_down(self):
-
-    #     rai_obj = self.bot.get_guild(self.misc_settings['guildId']).get_member(270366726737231884)
-    #     if str(rai_obj.status) == 'offline':
-    #         self.misc_settings["welcomeFeature"] = 1  # the welcome feature is set to on
-    #     else:
-    #         if self.misc_settings["welcomeFeature"] == 1:  # if the welcome feature is set to on
-    #             self.misc_settings["welcomeFeature"] = 0  # the welcome feature is set to off
 
     @tasks.loop(minutes=10)
     async def reset_goals(self):
@@ -125,7 +107,9 @@ class Misc(commands.Cog):
                                        f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
                                        f"__el inglés__, __el español__, __ambos__ u __otro__?")
 
-            # await self.welcomeSetup(member)
+        if self.misc_settings['notify_on_joining'] == 1:
+            await ctx.guild.get_member(581324505331400733).send(f"{member.mention} has just joined!")
+            await ctx.guild.get_member(581324505331400733).send(f"{member.mention} has just joined!")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
@@ -179,33 +163,8 @@ class Misc(commands.Cog):
                                 modules_moderation.saveSpecific(self.misc_settings, "misc_settings.json")
 
     async def welcomeSetup(self, msg):
-        # welcome_channel = None
+
         bot_info = await self.bot.application_info()
-        # if bot_info.id == 595011002215563303:  # esp eng pixel
-        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(243838819743432704)
-        # elif bot_info.id == 635114071175331852:  # pixel test
-        #     welcome_channel = self.bot.get_guild(self.misc_settings['guildId']).get_channel(811997637326012446)
-
-        # await welcome_channel.send(f"{member.mention}\n"
-        #                            f"Hello! Welcome to the server!          Is your **native language**: "
-        #                            f"__English__, __Spanish__, __both__, or __neither__?\n"
-        #                            f"¡Hola! ¡Bienvenido(a) al servidor!    ¿Tu **idioma materno** es: "
-        #                            f"__el inglés__, __el español__, __ambos__ u __otro__?")
-
-        # def check(msg):
-        #     if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
-        #         return True
-        #     else:
-        #         return False
-
-        # msg = await self.bot.wait_for('message', check=check, timeout=1800)
-
-        # while True:
-        # if msg.author.id == member.id and msg.channel.id == welcome_channel.id:
-        # break
-        # else:
-        # msg = await self.bot.wait_for('message', check=check, timeout=1800)
-
         content = re.sub('> .*\n', '', msg.content.casefold())  # remove quotes in case the user quotes bot
         content = content.translate(str.maketrans('', '', string.punctuation))  # remove punctuation
         for word in ['hello', 'hi', 'hola', 'thanks', 'gracias']:
@@ -658,17 +617,15 @@ class Misc(commands.Cog):
 
         
     @commands.command()
-    async def say(self,ctx, *content):
+    async def say(self, ctx, *content):
 
         """Lets pixel say anything in any channel
-        
         Syntaxis => message + | + channel where you want to send your message in
 
         You have to write your message and after your message put a | and after that the channel where you want to send your message in
-        
         for example => p!say hello | general"""
 
-        if modules_moderation.check_roles(ctx.message.author.roles, self.settings['roles_allowed']) == 1: 
+        if modules_moderation.check_roles(ctx.message.author.roles, self.settings['roles_allowed']) == 1:
 
             pos = -1
 
@@ -686,8 +643,8 @@ class Misc(commands.Cog):
 
                         pos = position
 
-                #We use this for to check for all the | used, and the last one is going to count as the character that actually
-                #divides the message to the channel's name
+                # We use this for to check for all the | used, and the last one is going to count as the character that actually
+                # divides the message to the channel's name
 
                 if pos != -1:
 
@@ -721,7 +678,6 @@ class Misc(commands.Cog):
 
                             await ctx.send("**That channel doesn't exist**")
 
-
                     else:
 
                         await ctx.bot.get_guild(ctx.message.guild.id.real).get_channel(ctx.message.channel.id).send(message)
@@ -732,8 +688,18 @@ class Misc(commands.Cog):
 
         else:
 
-                await ctx.send("**You don't have enough permissions**")
+            await ctx.send("**You don't have enough permissions**")
 
+    @commands.command()
+    async def toggle_new_user_watch(self, ctx):
+
+        if ctx.author.id == 155422817540767745 or ctx.author.id == 581324505331400733:
+            if self.misc_settings["notify_on_joining"] == 1:
+                self.misc_settings["notify_on_joining"] = 0
+                await ctx.send("The new user watch is off! 😴")
+            else:
+                self.misc_settings["notify_on_joining"] = 1
+                await ctx.send("The new user watch is on! OwO")
 
 
 def setup(bot):
